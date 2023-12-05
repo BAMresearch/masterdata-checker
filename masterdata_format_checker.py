@@ -8,9 +8,11 @@ Created on Tue Nov 28 16:01:50 2023
 import tkinter as tk
 from tkinter import filedialog
 import re
+import openpyxl
 
 def open_file_dialog():
     file_path = filedialog.askopenfilename(title="Select a File")
+    print(file_path)
     if file_path:
         selected_file_label.config(text=f"{file_path}")
         check_button.pack(side=tk.TOP, pady=5)  # Show the check_button under the open_button
@@ -26,11 +28,14 @@ def resize_window():
 
 def check_file():
     # Get the file name from the selected_file_label
-    file_name = selected_file_label.cget("text").split("/")[-1]
-    result = name_checker(file_name)
+    file_path = selected_file_label.cget("text")
+    file_name = file_path.split("/")[-1]
+    
+    result_name = name_checker(file_name)
+    result_content = content_checker(file_path)
 
     # Display the result under the "Check File" button
-    result_label.config(text=result)
+    result_label.config(text=result_name)
     result_label.pack(pady=10)
 
     # Adjust the window size based on the result text
@@ -79,6 +84,27 @@ def name_checker(file_name):
                 errors.append("Invalid contact person at position 5.")
             
             return "\n".join(errors)
+        
+def content_checker(file_path):
+    workbook = openpyxl.load_workbook(file_path)
+
+    # Select the specific sheet (replace 'Sheet1' with your sheet name)
+    sheet = workbook['Sheet1']
+
+    # Access a specific cell (e.g., cell A1)
+    cell_value_A1 = sheet['A1'].value
+    print(f"Value in cell A1: {cell_value_A1}")
+
+    # Access a range of cells (e.g., from A1 to B2)
+    cell_range_values = []
+    for row in sheet.iter_rows(min_row=1, max_row=2, min_col=1, max_col=2):
+        for cell in row:
+            cell_range_values.append(cell.value)
+
+    print(f"Values in range A1:B2: {cell_range_values}")
+
+    # Close the workbook after use
+    workbook.close()
 
 # Create the main application window
 app = tk.Tk()
