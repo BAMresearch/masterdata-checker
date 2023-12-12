@@ -209,7 +209,7 @@ def check_vocab_terms(sheet, errors):
             
     return errors
 
-file_path = 'C:/Users/cmadaria/Documents/Projects/Type checker/object_type_CHEMICAL_v1_S.3_relathma.xlsx'
+#file_path = 'C:/Users/cmadaria/Documents/Projects/Type checker/object_type_CHEMICAL_v1_S.3_relathma.xlsx'
 def content_checker(file_path):
     workbook = openpyxl.load_workbook(file_path)
     errors = []
@@ -466,11 +466,9 @@ def content_checker(file_path):
                             errors.append(f"Error: Invalid vocabulary code found in the '{term}' column at row(s): {', '.join(map(str, invalid_vocab))}")
 
 
-
-    print(errors)
-
-
     # Close the workbook after use
     workbook.close()
     
-content_checker(file_path)
+    return "\n".join(errors)
+    
+#content_checker(file_path)

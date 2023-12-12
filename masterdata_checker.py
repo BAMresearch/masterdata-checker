@@ -34,10 +34,12 @@ def check_file():
     file_name = file_path.split("/")[-1]
     
     result_name = name_checker(file_name)
-    #result_content = content_checker(file_path)
+    result_content = content_checker(file_path)
+    
+    result_format = result_name + "\n" + result_content
 
     # Display the result under the "Check File" button
-    result_label.config(text=result_name)
+    result_label.config(text=result_format)
     result_label.pack(pady=10)
 
     # Adjust the window size based on the result text
