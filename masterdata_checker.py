@@ -11,6 +11,7 @@ import re
 import openpyxl
 from masterdata_name_checker import name_checker
 from masterdata_content_checker import content_checker
+from masterdata_entity_checker import entity_checker
 
 def open_file_dialog():
     file_path = filedialog.askopenfilename(title="Select a File")
@@ -33,13 +34,19 @@ def check_file():
     file_path = selected_file_label.cget("text")
     file_name = file_path.split("/")[-1]
     
-    result_name = name_checker(file_name)
-    result_content = content_checker(file_path)
+    result_name = str(name_checker(file_name))
+    if result_name != "File name: OK!":
+        result_format = "NAME CHECKS:" + "\n-------------\n" + result_name
     
-    result_format = result_name + "\n" + result_content
+    else:
+        result_content = str(content_checker(file_path))
+        result_entity = str(entity_checker(file_path))
+        result_format = "NAME CHECKS:" + "\n-------------\n" + result_name + "\n" + "\nCONTENT CHECKS:" + "\n-------------\n" + result_content + "\n" + "\nENTITY CHECKS" + "\n-------------\n" + result_entity
 
     # Display the result under the "Check File" button
-    result_label.config(text=result_format)
+    result_label.config(state=tk.NORMAL)
+    result_label.delete(1.0, tk.END)
+    result_label.insert(tk.END, result_format)
     result_label.pack(pady=10)
 
     # Adjust the window size based on the result text
@@ -68,7 +75,7 @@ check_button = tk.Button(app, text="Check File!", command=check_file)
 check_button.pack_forget()
 
 # Create a label to display the result
-result_label = tk.Label(app, text="")
+result_label = tk.Text(app, wrap=tk.WORD, height=15, state=tk.DISABLED)
 result_label.pack_forget()  # Initially hide the result label
 
 # Start the main event loop
