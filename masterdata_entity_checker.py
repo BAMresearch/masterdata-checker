@@ -33,6 +33,13 @@ def get_entity_list(o, entity_type):
     
     elif entity_type == "DATASET_TYPE":
         return o.get_dataset_types()
+    
+def compare_objects(obj1, obj2):
+    # Check if both are None or both are empty strings
+    if (obj1 is None and obj2 == "") or (obj1 == "" and obj2 is None):
+        return True
+    else:
+        return obj1 == obj2
 
 
 def check_entity_same_code(file_path, o, openbis_entity):
@@ -168,6 +175,26 @@ def check_entity_same_code(file_path, o, openbis_entity):
                 "vocabulary": row[prop_headers.index('Vocabulary code')] if row[prop_headers.index('Vocabulary code')] is not None else "",
                 'metaData': {} if row[prop_headers.index('Metadata')] in (None, "") else row[prop_headers.index('Metadata')],
                 }
+            
+# =============================================================================
+# COMPARE EXCEL PROPERTIES WITH ALL THE INSTANCE PROPERTIES, NOT ASSIGNED ONES
+#     for key in properties_data.keys():
+#         try:
+#             prop_ob = o.get_property_type(key)
+#             if not compare_objects(properties_data[key]['label'],prop_ob.label):
+#                 errors.append(f"The label of Property type {key} has been changed compared to the previous version from {prop_ob.label} to {properties_data[key]['label']}.")
+#             elif not compare_objects(properties_data[key]['description'],prop_ob.description):
+#                 errors.append(f"The description of Property type {key} has been changed compared to the previous version from {prop_ob.description} to {properties_data[key]['description']}.")
+#             elif not compare_objects(properties_data[key]['dataType'],prop_ob.dataType):
+#                 errors.append(f"The data type of Property type {key} has been changed compared to the previous version from {prop_ob.dataType} to {properties_data[key]['dataType']}. This is only permissible for some cases, e.g., 'CONTROLLEDVOCABULARY' to 'VARCHAR'!")
+#             elif not compare_objects(properties_data[key]['vocabulary'],prop_ob.vocabulary):
+#                 errors.append(f"The vocabulary code of Property type {key} has been changed compared to the previous version from {prop_ob.vocabulary} to {properties_data[key]['vocabulary']}. This is not allowed.")
+#             elif not compare_objects(properties_data[key]['metaData'],prop_ob.metaData):
+#                 errors.append(f"The metadata of Property type {key} has been changed compared to the previous version from {prop_ob.metaData} to {properties_data[key]['metaData']}. This is not allowed.")
+#         except ValueError:
+#             continue
+# =============================================================================
+        
 
         
     #compare both dicts with sets of properties to check the differences
@@ -175,17 +202,17 @@ def check_entity_same_code(file_path, o, openbis_entity):
         for field in ["label", "description", "dataType", "vocabulary", "metaData"]:
             value1 = openbis_properties_data[key][field]
             value2 = properties_data[key][field]
-            if value1 != value2:
+            if not compare_objects(value1,value2):
                 if field == "label":
-                    errors.append(f"The label of Property type {key} has been changed compared to the previous version.")
+                    errors.append(f"The label of Property type {key} has been changed compared to the previous version from {value1} to {value2}.")
                 elif field == "description":
-                    errors.append(f"The description of Property type {key} has been changed compared to the previous version.")
+                    errors.append(f"The description of Property type {key} has been changed compared to the previous version from {value1} to {value2}.")
                 elif field == "dataType":
-                    errors.append(f"The data type of Property type {key} has been changed compared to the previous version. This is only permissible for some cases, e.g., 'CONTROLLEDVOCABULARY' to 'VARCHAR'!")
+                    errors.append(f"The data type of Property type {key} has been changed compared to the previous version from from {value1} to {value2}. This is only permissible for some cases, e.g., 'CONTROLLEDVOCABULARY' to 'VARCHAR'!")
                 elif field == "vocabulary":
-                    errors.append(f"The vocabulary code of Property type {key} has been changed compared to the previous version. This is not allowed.")
+                    errors.append(f"The vocabulary code of Property type {key} has been changed compared to the previous version from from {value1} to {value2}. This is not allowed.")
                 elif field == "metaData":
-                    errors.append(f"The metadata of Property type {key} has been changed compared to the previous version. This is not allowed.")
+                    errors.append(f"The metadata of Property type {key} has been changed compared to the previous version from from {value1} to {value2}. This is not allowed.")
 
     workbook.close()
     
