@@ -66,6 +66,18 @@ def check_properties(sheet, errors):
                 if invalid_codes:
                     # Append an error indicating the positions (row numbers) with invalid values for the current term
                     errors.append(f"Error: Invalid code found in the '{term}' column at row(s): {', '.join(map(str, invalid_codes))}")
+                    
+                #check that all the properties of the object are different using a set (unique terms):
+                if len(set(column_below_code)) != len(column_below_code):
+                    seen_props = set()
+                    repeated_props = set()
+                    for prop in column_below_code:
+                        if prop in seen_props:
+                            repeated_props.add(prop)
+                        else:
+                            seen_props.add(prop)
+                    errors.append(f"Error: The following properties are repeated: {repeated_props}. Please, delete the duplicates, and leave just one occurence")
+
             
             
             # Check the cell below "Description"
@@ -194,6 +206,18 @@ def check_vocab_terms(sheet, errors):
                 if invalid_codes:
                     # Append an error indicating the positions (row numbers) with invalid values for the current term
                     errors.append(f"Error: Invalid code found in the '{term}' column at row(s): {', '.join(map(str, invalid_codes))}")
+                
+                #check that all the properties of the object are different using a set (unique terms):
+                if len(set(column_below_code)) != len(column_below_code):
+                    seen_terms = set()
+                    repeated_terms = set()
+                    for term in column_below_code:
+                        if term in seen_terms:
+                            repeated_terms.add(term)
+                        else:
+                            seen_terms.add(term)
+                    errors.append(f"Error: The following vocabulary terms are repeated: {repeated_terms}. Please, delete the duplicates, and leave just one occurence")
+
             
             
             # Check the cell below "Description"
