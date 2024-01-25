@@ -8,6 +8,7 @@ import openpyxl
 from pybis_connection import connect
 from masterdata_content_checker import index_to_excel_column
 import re
+import pandas as pd
 
 
 # =============================================================================
@@ -38,8 +39,30 @@ def compare_objects(obj1, obj2):
     # Check if both are None or both are empty strings
     if (obj1 is None and obj2 == "") or (obj1 == "" and obj2 is None):
         return True
+    elif (obj1 == "False" and obj2 == "FALSE") or (obj1 == "FALSE" and obj2 == "False"):
+        return True
+    elif (obj1 == "True" and obj2 == "TRUE") or (obj1 == "TRUE" and obj2 == "True"):
+        return True
     else:
         return obj1 == obj2
+    
+def get_df_value(df, prop, attr):
+    column_name = 'propertyType'
+    value_to_find = prop
+    
+    # Create a boolean mask for rows where the condition is met
+    mask = df[column_name] == value_to_find
+
+    # Use the boolean mask to filter the DataFrame
+    filtered_df = df[mask]
+
+    column_to_access = attr
+    
+    # Using .at[] for a specific row
+    value = filtered_df.at[filtered_df.index[0], column_to_access]
+    
+    return value
+    
 
 
 def check_entity_same_code(file_path, o, openbis_entity):
@@ -174,6 +197,9 @@ def check_entity_same_code(file_path, o, openbis_entity):
                 'dataType': row[prop_headers.index('Data type')],
                 "vocabulary": row[prop_headers.index('Vocabulary code')] if row[prop_headers.index('Vocabulary code')] is not None else "",
                 'metaData': {} if row[prop_headers.index('Metadata')] in (None, "") else row[prop_headers.index('Metadata')],
+                'mandatory': row[prop_headers.index('Mandatory')],
+                'section': row[prop_headers.index('Section')],
+                'plugin': row[prop_headers.index('Dynamic script')],
                 }
             
 # =============================================================================
@@ -196,9 +222,29 @@ def check_entity_same_code(file_path, o, openbis_entity):
 # =============================================================================
         
 
-        
+    assigned_properties = openbis_entity.get_property_assignments().df
+    #properties present in the excel but not in openbis: not assigned
+    not_assigned_properties =  set(properties_data.keys()) - set(openbis_properties_data.keys())
+    
     #compare both dicts with sets of properties to check the differences
     for key in openbis_properties_data.keys() & properties_data.keys():
+        for assigned_field in ["mandatory", "section", "plugin"]:
+            excel_assigned = properties_data[key][assigned_field]
+            openbis_assigned = get_df_value(assigned_properties, key, assigned_field)
+            if not compare_objects(excel_assigned,openbis_assigned):
+                if assigned_field == "mandatory":
+                    if (str(openbis_assigned).upper() == "FALSE" and str(excel_assigned).upper() == "TRUE"):
+                        errors.append(f"The value of the attribute 'Mandatory' of Property type {key} has been changed compared to the previous version from FALSE to TRUE.")
+                    elif (str(openbis_assigned).upper() == "TRUE" and str(excel_assigned).upper() == "FALSE"):
+                        errors.append(f"ERROR: The value of the attribute 'Mandatory' of Property type {key} has been changed compared to the previous version from TRUE to FALSE. This is NOT allowed")
+                elif assigned_field == "section":
+                    errors.append(f"The section of Property type {key} has been changed compared to the previous version from {openbis_assigned} to {excel_assigned}.")
+                elif assigned_field == "plugin":
+                    if (openbis_assigned == "" or openbis_assigned == None) and (excel_assigned != "" or excel_assigned != None):
+                        errors.append(f"WARNING: A dynamic property script ({excel_assigned}) has been added retrospectively to the Property type {key}.")
+                    elif (str(openbis_assigned).upper() != str(excel_assigned).upper()):
+                        errors.append(f"ERROR: The dynamic property script of Property type {key} has been changed or deleted compared to the previous version. This is NOT allowed")
+                   
         for field in ["label", "description", "dataType", "vocabulary", "metaData"]:
             value1 = openbis_properties_data[key][field]
             value2 = properties_data[key][field]
@@ -208,12 +254,29 @@ def check_entity_same_code(file_path, o, openbis_entity):
                 elif field == "description":
                     errors.append(f"The description of Property type {key} has been changed compared to the previous version from {value1} to {value2}.")
                 elif field == "dataType":
-                    errors.append(f"The data type of Property type {key} has been changed compared to the previous version from from {value1} to {value2}. This is only permissible for some cases, e.g., 'CONTROLLEDVOCABULARY' to 'VARCHAR'!")
+                    errors.append(f"WARNING: The data type of Property type {key} has been changed compared to the previous version from from {value1} to {value2}. This is only permissible for some cases, e.g., 'CONTROLLEDVOCABULARY' to 'VARCHAR'!")
                 elif field == "vocabulary":
-                    errors.append(f"The vocabulary code of Property type {key} has been changed compared to the previous version from from {value1} to {value2}. This is not allowed.")
+                    errors.append(f"ERROR: The vocabulary code of Property type {key} has been changed compared to the previous version from from {value1} to {value2}. This is not allowed.")
                 elif field == "metaData":
-                    errors.append(f"The metadata of Property type {key} has been changed compared to the previous version from from {value1} to {value2}. This is not allowed.")
+                    errors.append(f"ERROR: The metadata of Property type {key} has been changed compared to the previous version from from {value1} to {value2}. This is not allowed.")
 
+
+    for key in not_assigned_properties:
+        try:
+             prop_ob = o.get_property_type(key)
+             if not compare_objects(properties_data[key]['label'],prop_ob.label):
+                 errors.append(f"The label of Property type {key} has been changed compared to the previous version from {prop_ob.label} to {properties_data[key]['label']}.")
+             elif not compare_objects(properties_data[key]['description'],prop_ob.description):
+                 errors.append(f"The description of Property type {key} has been changed compared to the previous version from {prop_ob.description} to {properties_data[key]['description']}.")
+             elif not compare_objects(properties_data[key]['dataType'],prop_ob.dataType):
+                 errors.append(f"The data type of Property type {key} has been changed compared to the previous version from {prop_ob.dataType} to {properties_data[key]['dataType']}. This is only permissible for some cases, e.g., 'CONTROLLEDVOCABULARY' to 'VARCHAR'!")
+             elif not compare_objects(properties_data[key]['vocabulary'],prop_ob.vocabulary):
+                 errors.append(f"The vocabulary code of Property type {key} has been changed compared to the previous version from {prop_ob.vocabulary} to {properties_data[key]['vocabulary']}. This is not allowed.")
+             elif not compare_objects(properties_data[key]['metaData'],prop_ob.metaData):
+                 errors.append(f"The metadata of Property type {key} has been changed compared to the previous version from {prop_ob.metaData} to {properties_data[key]['metaData']}. This is not allowed.")
+         except ValueError:
+             continue
+        
     workbook.close()
     
     return "\n".join(errors)
