@@ -274,7 +274,7 @@ def check_entity_same_code(file_path, o, openbis_entity):
                  errors.append(f"The vocabulary code of Property type {key} has been changed compared to the previous version from {prop_ob.vocabulary} to {properties_data[key]['vocabulary']}. This is not allowed.")
              elif not compare_objects(properties_data[key]['metaData'],prop_ob.metaData):
                  errors.append(f"The metadata of Property type {key} has been changed compared to the previous version from {prop_ob.metaData} to {properties_data[key]['metaData']}. This is not allowed.")
-         except ValueError:
+        except ValueError:
              continue
         
     workbook.close()
