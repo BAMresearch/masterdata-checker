@@ -333,9 +333,9 @@ def content_checker(file_path):
                     # Check the cell below "Auto generate codes"
                      elif term == "Auto generate codes":
                         cell_below_auto_generate = sheet.cell(row=3, column=term_index + 1)
-                        auto_code = ""
-                        if (cell_below_auto_generate.value == True): auto_code = "TRUE"
-                        if (cell_below_auto_generate.value == False): auto_code = "FALSE"
+                        auto_code = cell_below_auto_generate.value
+                        if (auto_code == True): auto_code = "TRUE"
+                        if (auto_code == False): auto_code = "FALSE"
                         if auto_code not in ["TRUE", "FALSE"]:
                             errors.append("Error: Value below 'Auto generate codes' should be 'TRUE' or 'FALSE'.")
             
