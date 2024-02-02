@@ -14,6 +14,7 @@ def index_to_excel_column(index):
         column = chr(65 + remainder) + column
     return column
 
+
 def check_properties(sheet, errors):
     expected_terms = [
         "Version",
@@ -319,8 +320,11 @@ def content_checker(file_path):
                     # Check the cell below "Generated code prefix"
                      elif term == "Generated code prefix":
                         cell_below_generated_code = sheet.cell(row=3, column=term_index + 1)
-                        if cell_below_generated_code.value != code[0:3]:
-                            errors.append("Warning: It is recommended that the value of 'Generated code prefix' be the first three letters of the 'Code'.")
+                        code_replace = code.replace('_', '.').split('.')
+                        ext_code = [word[:3].upper() for word in code_replace]
+                        generated_code = '.'.join(ext_code)
+                        if cell_below_generated_code.value != generated_code:
+                            errors.append("Warning: It is recommended that the value of 'Generated code prefix' be the first three letters of each part of the 'Code' separated by dots ['.'].")
 
                     # Check the cell below "Validation script"
                      elif term == "Validation script":

@@ -474,9 +474,12 @@ def check_prefix_prefix(o, prefix, entity_type, errors):
 
         if (len(difference) != 0) or (len(changes) != 0):
             errors.append(f"As a specification of the entity type {prefix}, the entity type {entity_code} must include all Property types of {prefix} without any changes.")
-            errors.append(f"The missing properties are: ")
             missing = ", ".join(difference)
-            errors.append(missing)
+            if missing != "":
+                errors.append(f"The missing properties are: ")
+                errors.append(missing)
+            else:
+                errors.append(f"There are no missing properties")
             errors.append(f"The changed property attributes are: ")
             changed = "\n".join(changes)
             errors.append(changed)
