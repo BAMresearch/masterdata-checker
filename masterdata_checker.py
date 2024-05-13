@@ -12,6 +12,7 @@ import openpyxl
 from masterdata_name_checker import name_checker
 from masterdata_content_checker import content_checker
 from masterdata_entity_checker import entity_checker
+from masterdata_visualizer import check_instance
 
 def open_file_dialog():
     file_path = filedialog.askopenfilename(title="Select a File")
@@ -51,6 +52,19 @@ def check_file():
 
     # Adjust the window size based on the result text
     resize_window()
+    
+def show_content():
+    # Get the file name from the selected_file_label
+    content = check_instance()
+    # Display the result under the "Check File" button
+    check_button.pack_forget() 
+    result_label.config(state=tk.NORMAL)
+    result_label.delete(1.0, tk.END)
+    result_label.insert(tk.END, content)
+    result_label.pack(pady=10)
+
+    # Adjust the window size based on the result text
+    resize_window()
 
 
 # Create the main application window
@@ -69,6 +83,10 @@ selected_file_label.pack()
 # Create a button to trigger the file dialog
 open_button = tk.Button(app, text="Select File...", command=open_file_dialog)
 open_button.pack(pady=20)
+
+# Create a button to visualize instance content
+content_button = tk.Button(app, text="Check Instance Content", command=show_content)
+content_button.pack(pady=20)
 
 # Create a "CHECK" button (initially hidden)
 check_button = tk.Button(app, text="Check File!", command=check_file)
