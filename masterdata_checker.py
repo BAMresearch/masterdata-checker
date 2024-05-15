@@ -70,7 +70,7 @@ def show_content():
 # Create the main application window
 app = tk.Tk()
 app.title("openBIS Masterdata Format Checker")  # Set the title
-app.geometry("400x150")  # Set the window size (width x height)
+app.geometry("400x250")  # Set the window size (width x height)
 
 # Create a label for the title
 title_label = tk.Label(app, text="openBis Masterdata Format Checker", font=("Helvetica", 16))
