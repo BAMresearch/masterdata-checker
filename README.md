@@ -1,4 +1,4 @@
-# Masterdata_Checker
+# Masterdata Checker & Visualizer
 
 Check the correctness and alignment with the BAM Data Store Project guidelines of the new entities before registering them in openBIS, with a clear and easy interface, and a detailed list of every present issue.
 
