@@ -4,6 +4,8 @@ Check the correctness and alignment with the BAM Data Store Project guidelines o
 
 It is also possible to visualize the whole content of the desired openBIS instances, as long as we have credentials to access them, to check the metadata already present on the selected instance.
 
+There is also available a Jupyter Notebook version to execute the Masterdata Checker and Visualizer directly in the Web IDE.
+
 
 ## Visuals
 Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
