@@ -73,6 +73,18 @@ From Jupyter Notebooks:
 
 ![checker2](./images/Screenshot_2024-08-26_111456.png)
 
+### Local Application: Visualizing instance content
+
+1- Inside the main project folder, run the following in the command line (cmd): ``python masterdata_checker.py``
+
+2- This interface will appear, click on ""Check Instance Content".
+
+![checker1](./images/Screenshot_2024-08-26_110931.png)
+
+3- Now wait a few seconds, until a message indicating that a CSV file was created. This file will be located in the same location where you are executing the script, with name of the instance, an underscore "_", and the day of execution. It will contain all the instance Masterdata information (types for every entity, object properties by type, ...) 
+
+![checker3](./images/Screenshot_2024-08-26_111456.png)
+
 ### Jupyter Notebook Web IDE
 
 1- Run ``jupyter-notebook`` (on the command line)
