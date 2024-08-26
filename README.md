@@ -77,7 +77,7 @@ From Jupyter Notebooks:
 
 3- Now wait a few seconds, until a message indicating that a CSV file was created. This file will be located in the same location where you are executing the script, with name of the instance, an underscore "_", and the day of execution. It will contain all the instance Masterdata information (types for every entity, object properties by type, ...) 
 
-![checker3](./images/Screenshot_2024-08-26_111456.png)
+![checker3](./images/Screenshot_2024-08-26_111600.png)
 
 ### Jupyter Notebook Web IDE
 
