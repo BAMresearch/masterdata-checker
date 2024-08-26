@@ -15,8 +15,42 @@ There is also available a Jupyter Notebook version to execute the Masterdata Che
 ![checker3](./images/Screenshot_2024-08-26_111600.png)
 
 
+## Requirements
+- ([Python3](https://www.python.org/downloads/))
+
+Once that you have installed latest Python version, you can use the ``pip`` command to install the following dependencies (both in your command line (cmd) or directly in a Jupyter Notebook):
+- pyBIS: ``pip install pybis``
+- pandas: ``pip install pandas``
+- regex: ``pip install re``
+
+Those are the basic packages that you will need.
+
+Now, depending on the version that you are going to use, you need to install the following packages (although probably most of them will be already installed within your Python installation, but just in case that you receive any error with some of the packages, here yu have the way of installing them):
+
+*For the Web IDE version (Jupyer Notebook)*:
+- ``pip install jupyterlab`` // ``pip install notebook`` (choose one, information about [here](https://jupyter.org/install))
+- CSV: ``pip install csv``
+- OS: ``pip install os``
+- Python Widgets: ``pip install ipywidgets``
+- Time: ``pip install time``
+- Tempfile: ``pip install tempfile``
+
+*For the local UI (User Interface)*:
+- TKInter: ``pip install tkinter``
+- OpenPyXL: ``pip install openpyxl``
+
+
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Once that you have fulfilled all the requirements above, no more installation is needed, you can just run the main script to start using it:
+
+From command line:
+- ``python masterdata_checker.py``
+
+From Jupyter Notebooks:
+- ``jupyter-notebook`` (on the command line)
+- Open the file *jupyter_checker/checker_jupyter.ipynb*
+
+
 
 ## Usage
 Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
