@@ -9,12 +9,6 @@ It is also possible to visualize the whole content of the desired openBIS instan
 There is also available a Jupyter Notebook version to execute the Masterdata Checker and Visualizer directly in the Web IDE.
 
 
-## Visuals
-![checker1](./images/Screenshot_2024-08-26_110931.png)
-![checker2](./images/Screenshot_2024-08-26_111456.png)
-![checker3](./images/Screenshot_2024-08-26_111600.png)
-
-
 ## Requirements
 - ([Python3](https://www.python.org/downloads/))
 
