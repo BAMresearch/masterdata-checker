@@ -12,7 +12,7 @@ import openpyxl
 from masterdata_name_checker import name_checker
 from masterdata_content_checker import content_checker
 from masterdata_entity_checker import entity_checker
-from masterdata_visualizer import check_instance
+from masterdata_visualizer_csv import generate_csv_and_download
 
 def open_file_dialog():
     file_path = filedialog.askopenfilename(title="Select a File")
@@ -21,6 +21,7 @@ def open_file_dialog():
         selected_file_label.config(text=f"{file_path}")
         check_button.pack(side=tk.TOP, pady=5)  # Show the check_button under the open_button
         result_label.pack_forget()  # Hide the result label
+        content_button.pack_forget()  # Hide the Check Instance Content button
         resize_window()
 
 def resize_window():
@@ -45,7 +46,7 @@ def check_file():
         result_format = "NAME CHECKS:" + "\n-------------\n" + result_name + "\n" + "\nCONTENT CHECKS:" + "\n-------------\n" + result_content + "\n" + "\nENTITY CHECKS" + "\n-------------\n" + result_entity
 
     # Display the result under the "Check File" button
-    result_label.config(state=tk.NORMAL)
+    result_label.config(state=tk.NORMAL, height=15)
     result_label.delete(1.0, tk.END)
     result_label.insert(tk.END, result_format)
     result_label.pack(pady=10)
@@ -55,12 +56,14 @@ def check_file():
     
 def show_content():
     # Get the file name from the selected_file_label
-    content = check_instance()
+    content = generate_csv_and_download()
     # Display the result under the "Check File" button
     check_button.pack_forget() 
-    result_label.config(state=tk.NORMAL)
+    result_label.config(state=tk.NORMAL, height=3)
     result_label.delete(1.0, tk.END)
     result_label.insert(tk.END, content)
+    result_label.tag_add("center", "1.0", "end")
+    result_label.tag_configure("center", justify='center')
     result_label.pack(pady=10)
 
     # Adjust the window size based on the result text

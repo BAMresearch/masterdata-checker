@@ -33,6 +33,9 @@ def name_checker(file_path):
         
         else:
             file_parts = file_name[0].split("_")
+            if len(file_parts) < 2:
+                errors.append("Invalid name format. The name should contain different fields separated by underscores (_). Consult the wiki to see which ones.")
+                return errors
             creator = file_parts.pop(-1)
             section = file_parts.pop(-1)
             version = file_parts.pop(-1)
