@@ -60,11 +60,17 @@ From Jupyter Notebooks:
 ### Local Application: Checking a file
 
 1- Inside the main project folder, run the following in the command line (cmd): ``python masterdata_checker.py``
+
 2- This interface will appear, click on "Select File...".
+
 ![checker1](./images/Screenshot_2024-08-26_110931.png)
+
 3- A File Explorer window will appear, select the desired file and click on "Open".
+
 ![checker4](./images/Screenshot_2024-08-26_135001.png)
+
 4- Now, click on "Check File!", and wait a few seconds, until a text field with all the instance information appear.
+
 ![checker2](./images/Screenshot_2024-08-26_111456.png)
 
 ### Jupyter Notebook Web IDE
