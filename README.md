@@ -25,7 +25,7 @@ Once that you have installed latest Python version, you can use the ``pip`` comm
 
 Those are the basic packages that you will need.
 
-Now, depending on the version that you are going to use, you need to install the following packages (although probably most of them will be already installed within your Python installation, but just in case that you receive any error with some of the packages, here yu have the way of installing them):
+Now, depending on the version that you are going to use, you need to install the following packages (although probably most of them will be already installed within your Python installation, but just in case that you receive any error with some of the packages, here you have the way of installing them):
 
 *For the Web IDE version (Jupyer Notebook)*:
 - ``pip install jupyterlab`` // ``pip install notebook`` (choose one, information about [here](https://jupyter.org/install))
@@ -43,6 +43,9 @@ Now, depending on the version that you are going to use, you need to install the
 ## Installation
 Once that you have fulfilled all the requirements above, no more installation is needed, you can just run the main script to start using it:
 
+First, clone or download the repository code (and unzip it in case is compressed).
+Then, go to the main project folder an do the following:
+
 From command line:
 - ``python masterdata_checker.py``
 
@@ -53,7 +56,20 @@ From Jupyter Notebooks:
 
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+
+### Local Application: Checking a file
+
+1- Inside the main project folder, run the following in the command line (cmd): ``python masterdata_checker.py``
+2- This interface will appear, click on "Select File...".
+![checker1](./images/Screenshot_2024-08-26_110931.png)
+3- A File Explorer window will appear, select the desired file and click on "Open".
+![checker4](./images/Screenshot_2024-08-26_135001.png)
+4- Now, click on "Check File!", and wait a few seconds, until a text field with all the instance information appear.
+![checker2](./images/Screenshot_2024-08-26_111456.png)
+
+### Jupyter Notebook Web IDE
+
+1- Run ``jupyter-notebook`` (on the command line)
 
 ## Support
 Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
