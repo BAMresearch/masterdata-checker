@@ -81,7 +81,35 @@ From Jupyter Notebooks:
 
 ### Jupyter Notebook Web IDE
 
-1- Run ``jupyter-notebook`` (on the command line)
+1- Run ``jupyter-lab`` or ``jupyter-notebook`` on the folder where the jupyter_checker is located, using the command line (depending on what you have installed).
+
+2- On the left side, select the file *checker_jupyter.ipynb*, and double click to open it.
+
+3- Once the notebook is open, execute the first code cells: the one containing all the imports, and then the cell for selecting the openBIS instance. A dropdown list will appear containing all the available openBIS instances; select the desired one.
+
+![jup1](./images/Screenshot_2024-08-26_111746.png)
+
+4- Then, run the cell for entering username and password. Two text fields for entering this information and a button called "Login" should appear. Enter your information and click on it. If everything went well, you will see "Login sucessful!".
+
+![jup2](./images/Screenshot_2024-08-26_111801.png)
+
+***NOTE***: You will see another cell below the login tool, execute it just if the login fails for any reason using the login tool. It will take the username and password entered in the login tool, and do the login manually by script instead of using the button (that sometimes can fail).
+
+5- Now you will see the "FUNCTIONS" section. Here, you should execute all the cells that you can see (the cells will be collapsed, but you can extend them if you want just clicking on them), because there are the functions for the checker and visualizer. Run all the cell codes until you get to the section "USE THE CHECKER".
+
+![jup3](./images/Screenshot_2024-08-28_105511.png)
+
+6- (Just follow this step and the next one in case that you want to use the Masterdata Checker. In case that you want to execute the Visualizer, go directly to step 8). Execute the cell that goes after "UPLOAD THE EXCEL FILE". An *Upload* button will appear. Click on it, and upload the Excel file with the entity where you want to check the Masterdata.
+
+![jup4](./images/Screenshot_2024-08-28_110021.png)
+
+7- Finally, using the next cell will run the checker. A loading bar will appear with the different procesess, and once that it finishes, all the checks will appear below.
+
+![jup5](./images/Screenshot_2024-08-28_110636.png)
+
+8- For running the Visualizer, steps 6 and 7 are not needed. Just run the cell below the section "USE THE VISUALIZER", and you will see a loading bar. When it finishes, you will see the instance content (in Masterdata terms), and together with it, a CSV file will be generated in the same location of the notebook, in a folder determined by the instance, named with instace and generation date. Example directory and file name: *devel_data/devel_28082024*.
+
+![jup5](./images/Screenshot_2024-08-28_110709.png)
 
 ## Support
 Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
