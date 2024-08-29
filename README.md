@@ -53,29 +53,41 @@ From Jupyter Notebooks:
 
 ### Local Application: Checking a file
 
-1- Inside the main project folder, run the following in the command line (cmd): ``python masterdata_checker.py``
+1- Inside the main project folder, run the following in the command line (cmd): ``python masterdata_checker.py "username" "instancename"``, where you will need to replace "username" by your username in openBIS (for example, johndoe), and "instancename" by the name o the intance where you want to work with (for example, main).
 
-2- This interface will appear, click on "Select File...".
+![run1](./images/Screenshot_2024-08-29_125543.png)
+
+2- A prompt will appear asking for your password for the introduced username in the indicated instance. The password will not appear meanwhile you write it, to keep it private, but as soon as you are finish, click Enter, and if al the data is correct, the GUI will follow.
+
+![run2](./images/Screenshot_2024-08-29_125631.png)
+
+3- This interface will appear, click on "Select File...".
 
 ![checker1](./images/Screenshot_2024-08-26_110931.png)
 
-3- A File Explorer window will appear, select the desired file and click on "Open".
+4- A File Explorer window will appear, select the desired file and click on "Open".
 
 ![checker4](./images/Screenshot_2024-08-26_135001.png)
 
-4- Now, click on "Check File!", and wait a few seconds, until a text field with all the instance information appear.
+5- Now, click on "Check File!", and wait a few seconds, until a text field with all the instance information appear.
 
 ![checker2](./images/Screenshot_2024-08-26_111456.png)
 
 ### Local Application: Visualizing instance content
 
-1- Inside the main project folder, run the following in the command line (cmd): ``python masterdata_checker.py``
+1- Inside the main project folder, run the following in the command line (cmd): ``python masterdata_checker.py "username" "instancename"``, where you will need to replace "username" by your username in openBIS (for example, johndoe), and "instancename" by the name o the intance where you want to work with (for example, main).
 
-2- This interface will appear, click on ""Check Instance Content".
+![run1](./images/Screenshot_2024-08-29_125543.png)
+
+2- A prompt will appear asking for your password for the introduced username in the indicated instance. The password will not appear meanwhile you write it, to keep it private, but as soon as you are finish, click Enter, and if al the data is correct, the GUI will follow.
+
+![run2](./images/Screenshot_2024-08-29_125631.png)
+
+3- This interface will appear, click on ""Check Instance Content".
 
 ![checker1](./images/Screenshot_2024-08-26_110931.png)
 
-3- Now wait a few seconds, until a message indicating that a CSV file was created. This file will be located in the same location where you are executing the script, with name of the instance, an underscore "_", and the day of execution. It will contain all the instance Masterdata information (types for every entity, object properties by type, ...) 
+4- Now wait a few seconds, until a message indicating that a CSV file was created. This file will be located in the same location where you are executing the script, with name of the instance, an underscore "_", and the day of execution. It will contain all the instance Masterdata information (types for every entity, object properties by type, ...) 
 
 ![checker3](./images/Screenshot_2024-08-26_111600.png)
 
