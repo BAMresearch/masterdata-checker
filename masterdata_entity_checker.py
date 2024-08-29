@@ -5,7 +5,7 @@ Created on Wed Dec 27 15:02:19 2023
 @author: cmadaria
 """
 import openpyxl
-from pybis_connection import connect
+from pybis import Openbis
 from masterdata_content_checker import index_to_excel_column
 import re
 import pandas as pd
@@ -489,8 +489,13 @@ def check_prefix_prefix(o, prefix, entity_type, errors):
         check_prefix_prefix(o, prefix_2, entity_type, errors)
         
         
-def entity_checker(file_path):
-    o = connect('serverA')
+def entity_checker(file_path, username, password, instance):
+    
+    
+    url = f"https://{instance}.datastore.bam.de/"
+    o = Openbis(url)
+    o.login(username, password, save_token=True)
+    
     errors = []
     
     workbook = openpyxl.load_workbook(file_path)

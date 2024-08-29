@@ -9,10 +9,27 @@ import tkinter as tk
 from tkinter import filedialog
 import re
 import openpyxl
+import getpass
+import sys
 from masterdata_name_checker import name_checker
 from masterdata_content_checker import content_checker
 from masterdata_entity_checker import entity_checker
 from masterdata_visualizer_csv import generate_csv_and_download
+
+
+# Access command-line arguments
+if len(sys.argv) < 3:
+    print("Usage: python master_checker.py <username> <instance>")
+    sys.exit(1)
+
+username = sys.argv[1]
+instance = sys.argv[2]
+
+# Prompt for the password
+password = getpass.getpass(prompt="Please enter your password: ")
+
+# Now you have access to `username`, `instancename`, and `password`
+print(f"Username: {username}, Instance: {instance}")
 
 def open_file_dialog():
     file_path = filedialog.askopenfilename(title="Select a File")
@@ -42,7 +59,7 @@ def check_file():
     
     else:
         result_content = str(content_checker(file_path))
-        result_entity = str(entity_checker(file_path))
+        result_entity = str(entity_checker(file_path, username, password, instance))
         result_format = "NAME CHECKS:" + "\n-------------\n" + result_name + "\n" + "\nCONTENT CHECKS:" + "\n-------------\n" + result_content + "\n" + "\nENTITY CHECKS" + "\n-------------\n" + result_entity
 
     # Display the result under the "Check File" button
@@ -56,7 +73,7 @@ def check_file():
     
 def show_content():
     # Get the file name from the selected_file_label
-    content = generate_csv_and_download()
+    content = generate_csv_and_download(username, password, instance)
     # Display the result under the "Check File" button
     check_button.pack_forget() 
     result_label.config(state=tk.NORMAL, height=3)
@@ -76,7 +93,7 @@ app.title("openBIS Masterdata Format Checker")  # Set the title
 app.geometry("400x250")  # Set the window size (width x height)
 
 # Create a label for the title
-title_label = tk.Label(app, text="openBis Masterdata Format Checker", font=("Helvetica", 16))
+title_label = tk.Label(app, text="openBis Masterdata Checker", font=("Helvetica", 16))
 title_label.pack(pady=10)
 
 # Create a label for the selected file

@@ -5,20 +5,18 @@ Created on Tue May 21 13:35:52 2024
 @author: cmadaria
 """
 
-from pybis_connection import connect
+from pybis import Openbis
 import csv
 import os
 from datetime import datetime
 
-def generate_csv_and_download():
+def generate_csv_and_download(username, password, instance):
 
-    o = connect('serverA')
-    
-    url = o.url
-    
+    url = f"https://{instance}.datastore.bam.de/"
+    o = Openbis(url)
+    o.login(username, password, save_token=True)
+ 
     header = ["INSTANCE", "DATE"]
-    
-    instance = url.split("//")[1].split(".")[0]
     
     current_date = datetime.now().strftime("%d-%m-%Y")
     
