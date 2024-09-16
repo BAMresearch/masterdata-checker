@@ -101,8 +101,11 @@ def generate_csv_and_download(username, password, instance):
             if obj.code == "UNKNOWN":
                 continue
             props = []
-            for prop in obj.get_property_assignments():
-                props.append(f"{prop.code} ({str(prop.dataType).lower()})")
+            
+            assignments_df = obj.get_property_assignments().df
+            if 'propertyType' in assignments_df.columns:
+                for prop in obj.get_property_assignments():
+                    props.append(f"{prop.code} ({str(prop.dataType).lower()})")
             props_by_obj.append(props)
             
         # Determine the maximum length of the object properties
