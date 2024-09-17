@@ -1,13 +1,14 @@
 # Masterdata Checker & Visualizer
 
-The correctness and alignment with the BAM Data Store Project guidelines of the new entities before registering them in openBIS, through the Import utility using Excel files containing the new Objects data. 
+The Masterdata checker was developed to support Data Store Stewards and the Data Store Team in checking the conformity of openBIS Masterdata Entity Types (Object, Collection and Dataset Types) with the [‘Best Practices for Masterdata Definition’](https://datastore.bam.de/en/datastore/stewards/masterdata-best-practices#best-practices-for-masterdata-definition) as defined for the BAM Data Store.
 
-With a clear and easy interface, and a detailed list of every present issue in the Excel files, it allows you to correct your new objects and to avoid losing time.
+The Masterdata Visualizer lists all Masterdata elements (Entity, Controlled Vocabularies and Property -Types).  The access rights that users have for using a Data Store instance apply for checking and visualising the Masterdata with these tools.
 
-It is also possible to visualize the whole content of the desired openBIS instances, as long as we have credentials to access them, to check the metadata already present on the selected instance.
+There are two alternatives for using these tools, which are explained in more detail below: 
+1. Local application
+2. Jupyter Notebook Web IDE
 
-There is also available a Jupyter Notebook version to execute the Masterdata Checker and Visualizer directly in the Web IDE.
-
+Text to add: Here should be shortly explained what are the advantages of using one or the other alternative or why these alternatives are made available to users!!
 
 ## Requirements
 - ([Python3](https://www.python.org/downloads/))
