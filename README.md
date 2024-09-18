@@ -30,8 +30,7 @@ Additional packages are automatically installed with the version Python3. In cas
 - OpenPyXL: ``pip install openpyxl``
 
 2. *Using the Jupyer Notebook Web IDE*:
-- ``pip install jupyterlab`` // ``pip install notebook`` 
-- [@Carlos: We need to clarify what you mean with:] (choose one, information about [here](https://jupyter.org/install)) x
+- Install [Jupyter](https://jupyter.org/install) (if it is not present already in your system) using one of the following commands: ``pip install jupyterlab`` // ``pip install notebook`` . Information about the differences between both of them can be found [here](https://domino.ai/data-science-dictionary/jupyter-notebook).
 - CSV: ``pip install csv``
 - OS: ``pip install os``
 - Python Widgets: ``pip install ipywidgets``
@@ -40,24 +39,24 @@ Additional packages are automatically installed with the version Python3. In cas
 
 
 ## Installation
-~~Once that you have fulfilled all the requirements above, no more installation is needed, you can just run the main script to start using it:~~
-
-- [@Carlos: We need to clarify what for is the following step, if this does not belong to "installation" should be relocated in this text:] First, clone or download the repository code (and unzip it in case is compressed).
-Then, go to the main project folder an do the following:
-The following installation steps are required to open the tools
-- [@Carlos: As I understand the prior step is required to use 1. Using the local Application. Therefore a text should be added to explain the users that they need to download the Jupyter Notebook from the Git repository and save it locally. Results will be saved where the Jupyter Notebook is loacated in their computer, etc..]
-
-
-1. *Using the Local Application*: Type and execute the following command in the command line:
-- ``python masterdata_checker.py``
-
-2. *From Jupyter Notebooks*: Type and execute the following command in the command line:
-- ``jupyter-notebook``
-A window in the browser should open with the Jupyter enviroment displaying the folder structure of your computer. Opent the *jupyter_checker/checker_jupyter.ipynb* by double clicking the jupyter Notebook saved locally in your computer.
-
-The results of the Masterdata Checker and the Visualiser are automatically saved in XXX? when the 1st local application is used or locally on your computer in the same directory where the jupyter notebook is saved.
+Once that you have fulfilled all the requirements above, no more installation is needed, you can just run the main script to start using it. Follow the next section (*Usage*) to use the tool
 
 ## Usage
+
+
+1. *Using the Local Application*:
+    - First, clone or download the repository code (and unzip it in case is compressed).
+    - Then, go to the main project folder an run the following command in the command line: ``python masterdata_checker.py "username" "instancename"``
+    - Your password for that user and instance will be asked.
+    - Once introduced, the interface will open.
+    - Results will be saved where the project is located locally in the computer, in a folder called *data_'instancename'* (explained in the examples below).
+
+2. *From Jupyter Notebooks*:
+    - To use the notebook version, downloading the Jupyter Notebook from the Git repository and save it locally is enough (located in *jupyter_checker/checker_jupyter.ipynb*), there is no need to download the rest of the files in the repository.
+    - Type and execute the following command in the command line: ``jupyter-notebook`` ( or ``jupyter-lab``, depending on the tool installed)
+    - A window in the browser should open with the Jupyter enviroment displaying the folder structure of your computer. Open the *checker_jupyter.ipynb* by double clicking the jupyter Notebook saved locally in your computer.
+    - Results will be saved where the Jupyter Notebook is located locally in the computer, in a folder called *data_'instancename'* (explained in the examples below).
+
 
 ### Local Application: Checking a file
 
