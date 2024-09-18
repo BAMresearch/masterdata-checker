@@ -5,50 +5,57 @@ The Masterdata checker was developed to support Data Store Stewards and the Data
 The Masterdata Visualizer lists all Masterdata elements (Entity, Controlled Vocabularies and Property -Types).  The access rights that users have for using a Data Store instance apply for checking and visualising the Masterdata with these tools.
 
 There are two alternatives for using these tools, which are explained in more detail below: 
-1. Local application
-2. Jupyter Notebook Web IDE
+1. Using the local application
+2. Using the Jupyter Notebook Web IDE
 
-Text to add: Here should be shortly explained what are the advantages of using one or the other alternative or why these alternatives are made available to users!!
+These alternatives for using the tools are offered for users who are familiar with the command line or not. The Jupyter Notebook supports users who are not familiar with the command line.
 
 ## Requirements
-- ([Python3](https://www.python.org/downloads/))
 
-Once that you have installed latest Python version, you can use the ``pip`` command to install the following dependencies (both in your command line (cmd) or directly in a Jupyter Notebook):
+Both alternatives 1. Local application and 2. Jupyter Notebook Web IDE have following requirements (I and II): 
+
+I. **Python**: Install the latest version of Python:
+([Python3](https://www.python.org/downloads/))
+
+II. **Install dependencies**: These are required Python packages.  Once you have installed the latest Python version, you can use the ``pip`` command to install the dependencies (both in the command line (cmd) and in the Jupyter Notebook):
+
 - pyBIS: ``pip install pybis``
 - pandas: ``pip install pandas``
 - regex: ``pip install re``
 
-Those are the basic packages that you will need.
+Additional packages are automatically installed with the version Python3. In case that you are using an older Python version, make sure to install following Python packages as follows:
 
-Now, depending on the version that you are going to use, you need to install the following packages (although probably most of them will be already installed within your Python installation, but just in case that you receive any error with some of the packages, here you have the way of installing them):
+1. *Using the local Application*
+- TKInter: ``pip install tkinter``
+- OpenPyXL: ``pip install openpyxl``
 
-*For the Web IDE version (Jupyer Notebook)*:
-- ``pip install jupyterlab`` // ``pip install notebook`` (choose one, information about [here](https://jupyter.org/install))
+2. *Using the Jupyer Notebook Web IDE*:
+- ``pip install jupyterlab`` // ``pip install notebook`` 
+- [@Carlos: We need to clarify what you mean with:] (choose one, information about [here](https://jupyter.org/install)) x
 - CSV: ``pip install csv``
 - OS: ``pip install os``
 - Python Widgets: ``pip install ipywidgets``
 - Time: ``pip install time``
 - Tempfile: ``pip install tempfile``
 
-*For the local UI (User Interface)*:
-- TKInter: ``pip install tkinter``
-- OpenPyXL: ``pip install openpyxl``
-
 
 ## Installation
-Once that you have fulfilled all the requirements above, no more installation is needed, you can just run the main script to start using it:
+~~Once that you have fulfilled all the requirements above, no more installation is needed, you can just run the main script to start using it:~~
 
-First, clone or download the repository code (and unzip it in case is compressed).
+- [@Carlos: We need to clarify what for is the following step, if this does not belong to "installation" should be relocated in this text:] First, clone or download the repository code (and unzip it in case is compressed).
 Then, go to the main project folder an do the following:
+The following installation steps are required to open the tools
+- [@Carlos: As I understand the prior step is required to use 1. Using the local Application. Therefore a text should be added to explain the users that they need to download the Jupyter Notebook from the Git repository and save it locally. Results will be saved where the Jupyter Notebook is loacated in their computer, etc..]
 
-From command line:
+
+1. *Using the Local Application*: Type and execute the following command in the command line:
 - ``python masterdata_checker.py``
 
-From Jupyter Notebooks:
-- ``jupyter-notebook`` (on the command line)
-- Open the file *jupyter_checker/checker_jupyter.ipynb*
+2. *From Jupyter Notebooks*: Type and execute the following command in the command line:
+- ``jupyter-notebook``
+A window in the browser should open with the Jupyter enviroment displaying the folder structure of your computer. Opent the *jupyter_checker/checker_jupyter.ipynb* by double clicking the jupyter Notebook saved locally in your computer.
 
-
+The results of the Masterdata Checker and the Visualiser are automatically saved in XXX? when the 1st local application is used or locally on your computer in the same directory where the jupyter notebook is saved.
 
 ## Usage
 
