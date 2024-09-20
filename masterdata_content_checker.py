@@ -125,9 +125,9 @@ def check_properties(sheet, errors):
                         column_below_section.append(cell.value)
                     else:
                         pass
-                invalid_section = [i + 5 for i, cell in enumerate(column_below_section) if not (re.match(r'.*', str(cell)) or "$" in str(cell))]
+                invalid_section = [i + 5 for i, cell in enumerate(column_below_section) if not (re.match(r'^[A-Z][A-Za-z]*(?:\s[A-Z][A-Za-z]*)*$', str(cell)) or "$" in str(cell))]
                 if invalid_section:
-                    errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_section))}. Specify the section as text format")
+                    errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_section))}. Each word in the Section should start with a capital letter.")
 
             # Check the cell below "Property label"
              elif term == "Property label":
@@ -498,14 +498,14 @@ def content_checker(file_path, name_ok):
                             invalid_values = [str(value) for _, value in invalid_show]
                             errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Accepted values: TRUE, FALSE. Value(s) found: {', '.join(invalid_values)}")
                     
-                    # Check the cell below "Section"
                      elif term == "Section":
                         column_below_section = sheet[term_index][2:]
-                        invalid_section = [(i + 3, cell.value) for i, cell in enumerate(column_below_section) if not re.match(r'.*', str(cell.value))]
+                        print(column_below_section)
+                        invalid_section = [(i + 3, cell.value) for i, cell in enumerate(column_below_section) if not re.match(r'^[A-Z][a-z]*(?:\s[A-Z][a-z]*)*$', str(cell.value))]
                         if invalid_section:
                             invalid_rows = [str(row) for row, _ in invalid_section]
                             invalid_values = [str(value) for _, value in invalid_section]
-                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Specify the section as text format. Value(s) found: {', '.join(invalid_values)}")
+                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Each word should start with a capital letter. Value(s) found: {', '.join(invalid_values)}")
                     
                     # Check the cell below "Property label"
                      elif term == "Property label":
