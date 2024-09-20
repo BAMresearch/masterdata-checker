@@ -56,14 +56,11 @@ def check_file():
     file_path = selected_file_label.cget("text")
     file_name = file_path.split("/")[-1]
     
-    result_name = str(name_checker(file_name))
-    if result_name != "File name: OK!":
-        result_format = "CHECKED NAME:" + "\n-------------\n" + result_name
-    
-    else:
-        result_content = str(content_checker(file_path))
-        result_entity = str(entity_checker(file_path, o))
-        result_format = "CHECKED NAME:" + "\n-------------\n" + result_name + "\n" + "\nCHECKED CONTENT:" + "\n-------------\n" + result_content + "\n" + "\nCHECKED ENTITY" + "\n-------------\n" + result_entity
+    result_name = str(name_checker(file_name)[0])
+    name_ok = name_checker(file_name)[1]
+    result_content = str(content_checker(file_path, name_ok))
+    result_entity = str(entity_checker(file_path, o))
+    result_format = "CHECKED NAME:" + "\n-------------\n" + result_name + "\n" + "\nCHECKED CONTENT:" + "\n-------------\n" + result_content + "\n" + "\nCHECKED ENTITY" + "\n-------------\n" + result_entity
 
     # Display the result under the "Check File" button
     result_label.config(state=tk.NORMAL, height=15)

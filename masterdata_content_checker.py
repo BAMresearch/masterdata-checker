@@ -238,19 +238,23 @@ def check_vocab_terms(sheet, errors):
     return "\n".join(errors)
 
 #file_path = 'C:/Users/cmadaria/Documents/Projects/Type checker/object_type_CHEMICAL_v1_S.3_relathma.xlsx'
-def content_checker(file_path):
+def content_checker(file_path, name_ok):
     workbook = openpyxl.load_workbook(file_path)
-    errors = []
-    file_name = file_path.split("/")[-1]
-    file_name = file_name.split(".xls")
-    file_parts = file_name[0].split("_")
-    file_parts.pop(-1)
-    file_parts.pop(-1)
-    version = file_parts.pop(-1)
-    etype = file_parts.pop(0)
-    if (etype == "object" or etype == "collection" or etype == "dataset"):
-        etype = etype + "_" + file_parts.pop(0)
-    code = "_".join(file_parts)
+    errors = []  
+    
+    if(name_ok):
+        file_name = file_path.split("/")[-1]
+        file_name = file_name.split(".xls")
+        file_parts = file_name[0].split("_")
+        file_parts.pop(-1)
+        file_parts.pop(-1)
+        version = file_parts.pop(-1)
+        etype = file_parts.pop(0)
+        if (etype == "object" or etype == "collection" or etype == "dataset"):
+            etype = etype + "_" + file_parts.pop(0)
+        code = "_".join(file_parts)
+    else:
+        version, etype, code = "", "", ""
 
     sheet = workbook.active
     
