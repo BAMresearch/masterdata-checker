@@ -233,7 +233,7 @@ def check_vocab_terms(sheet, errors):
                 column_below_label = sheet[term_letter][4:]
                 invalid_label = [i + 5 for i, cell in enumerate(column_below_label) if cell.value and not re.match(r'.*', str(cell.value))]
                 if invalid_label:
-                    errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_section))}. Specify the label as text format")
+                    errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_label))}. Specify the label as text format")
             
     return "\n".join(errors)
 
@@ -451,69 +451,84 @@ def content_checker(file_path):
                      if term == "Version":
                         column_below_version = sheet[term_index][2:]
                         # Check if any value in the column is not an integer
-                        non_integer_indices = [i + 3 for i, cell in enumerate(column_below_version) if not isinstance(cell.value, int)]
-                        if non_integer_indices:
+                        non_integer_cells = [(i + 3, cell.value) for i, cell in enumerate(column_below_version) if not isinstance(cell.value, int)]
+                        if non_integer_cells:
                             # Append an error indicating the positions (row numbers) that are not integers
-                            errors.append(f"Error: Values not valid found in the 'Version' column (they should be Integers) at row(s): {', '.join(map(str, non_integer_indices))}. Value found: {cell.value}")
+                            non_integer_indices = [str(row) for row, _ in non_integer_cells]
+                            invalid_values = [str(value) for _, value in non_integer_cells]
+                            errors.append(f"Error: Values not valid found in the 'Version' column (they should be Integers) at row(s): {', '.join(non_integer_indices)}. Value(s) found: {', '.join(invalid_values)}")
 
                     # Check the column below "Code"
                      elif term == "Code":
                         column_below_code = sheet[term_index][2:]
-                        invalid_codes = [i + 3 for i, cell in enumerate(column_below_code) if not re.match(r'^\$?[A-Z0-9_.]+$', str(cell.value))]
+                        invalid_codes = [(i + 3, cell.value) for i, cell in enumerate(column_below_code) if not re.match(r'^\$?[A-Z0-9_.]+$', str(cell.value))]
                         if invalid_codes:
-                            # Append an error indicating the positions (row numbers) with invalid values for the current term
-                            errors.append(f"Error: Invalid code found in the '{term}' column at row(s): {', '.join(map(str, invalid_codes))}. Value found: {cell.value}")
-                    
+                            invalid_rows = [str(row) for row, _ in invalid_codes]
+                            invalid_values = [str(value) for _, value in invalid_codes]
+                            errors.append(f"Error: Invalid code found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Value(s) found: {', '.join(invalid_values)}")
                     
                     # Check the cell below "Description"
                      elif term == "Description":
                         column_below_description = sheet[term_index][2:]
-                        invalid_indices = [i + 3 for i, cell in enumerate(column_below_code) if not re.match(r'.*//.*', str(cell.value))]
-                        if invalid_indices:
-                            errors.append(f"Error: Invalid value(s) found in the '{term}' column at row(s): {', '.join(map(str, invalid_indices))}. Description should follow the schema: English Description + '//' + German Description. Value found: {cell.value}")
-
+                        invalid_descriptions = [(i + 3, cell.value) for i, cell in enumerate(column_below_description) if not re.match(r'.*//.*', str(cell.value))]
+                        if invalid_descriptions:
+                            invalid_rows = [str(row) for row, _ in invalid_descriptions]
+                            invalid_values = [str(value) for _, value in invalid_descriptions]
+                            errors.append(f"Error: Invalid value(s) found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Description should follow the schema: English Description + '//' + German Description. Value(s) found: {', '.join(invalid_values)}")
+                    
                     # Check the cell below "Mandatory"
                      elif term == "Mandatory":
                         column_below_mandatory = sheet[term_index][2:]
-                        invalid_mandatory = [i + 3 for i, cell in enumerate(column_below_mandatory) if cell.value not in ["TRUE", "FALSE"]]
+                        invalid_mandatory = [(i + 3, cell.value) for i, cell in enumerate(column_below_mandatory) if cell.value not in ["TRUE", "FALSE"]]
                         if invalid_mandatory:
-                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_mandatory))}. Accepted values: TRUE, FALSE. Value found: {cell.value}")
-
+                            invalid_rows = [str(row) for row, _ in invalid_mandatory]
+                            invalid_values = [str(value) for _, value in invalid_mandatory]
+                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Accepted values: TRUE, FALSE. Value(s) found: {', '.join(invalid_values)}")
+                    
                     # Check the cell below "Show in edit views"
                      elif term == "Show in edit views":
                         column_below_show = sheet[term_index][2:]
-                        invalid_show = [i + 3 for i, cell in enumerate(column_below_show) if cell.value not in ["TRUE", "FALSE"]]
+                        invalid_show = [(i + 3, cell.value) for i, cell in enumerate(column_below_show) if cell.value not in ["TRUE", "FALSE"]]
                         if invalid_show:
-                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_show))}. Accepted values: TRUE, FALSE. Value found: {cell.value}")
-
+                            invalid_rows = [str(row) for row, _ in invalid_show]
+                            invalid_values = [str(value) for _, value in invalid_show]
+                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Accepted values: TRUE, FALSE. Value(s) found: {', '.join(invalid_values)}")
+                    
                     # Check the cell below "Section"
                      elif term == "Section":
                         column_below_section = sheet[term_index][2:]
-                        invalid_section = [i + 3 for i, cell in enumerate(column_below_section) if not re.match(r'.*', str(cell.value))]
+                        invalid_section = [(i + 3, cell.value) for i, cell in enumerate(column_below_section) if not re.match(r'.*', str(cell.value))]
                         if invalid_section:
-                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_section))}. Specify the section as text format. Value found: {cell.value}")
-
+                            invalid_rows = [str(row) for row, _ in invalid_section]
+                            invalid_values = [str(value) for _, value in invalid_section]
+                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Specify the section as text format. Value(s) found: {', '.join(invalid_values)}")
+                    
                     # Check the cell below "Property label"
                      elif term == "Property label":
                         column_below_label = sheet[term_index][2:]
-                        invalid_label = [i + 3 for i, cell in enumerate(column_below_label) if not re.match(r'.*', str(cell.value))]
+                        invalid_label = [(i + 3, cell.value) for i, cell in enumerate(column_below_label) if not re.match(r'.*', str(cell.value))]
                         if invalid_label:
-                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_label))}. Specify the property label as text format. Value found: {cell.value}")
-
+                            invalid_rows = [str(row) for row, _ in invalid_label]
+                            invalid_values = [str(value) for _, value in invalid_label]
+                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Specify the property label as text format. Value(s) found: {', '.join(invalid_values)}")
+                    
                     # Check the cell below "Data type"
                      elif term == "Data type":
                         column_below_type = sheet[term_index][2:]
-                        invalid_type = [i + 3 for i, cell in enumerate(column_below_type) if cell.value not in ["INTEGER", "REAL", "VARCHAR", "MULTILINE_VARCHAR", "HYPERLINK", "BOOLEAN", "CONTROLLEDVOCABULARY", "XML", "TIMESTAMP", "DATE", "SAMPLE"]]
+                        invalid_type = [(i + 3, cell.value) for i, cell in enumerate(column_below_type) if cell.value not in ["INTEGER", "REAL", "VARCHAR", "MULTILINE_VARCHAR", "HYPERLINK", "BOOLEAN", "CONTROLLEDVOCABULARY", "XML", "TIMESTAMP", "DATE", "SAMPLE"]]
                         if invalid_type:
-                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_type))}. Accepted types: INTEGER, REAL, VARCHAR, MULTILINE_VARCHAR, HYPERLINK, BOOLEAN, CONTROLLEDVOCABULARY, XML, TIMESTAMP, DATE, SAMPLE.  Value found: {cell.value}")
-
+                            invalid_rows = [str(row) for row, _ in invalid_type]
+                            invalid_values = [str(value) for _, value in invalid_type]
+                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Accepted types: INTEGER, REAL, VARCHAR, MULTILINE_VARCHAR, HYPERLINK, BOOLEAN, CONTROLLEDVOCABULARY, XML, TIMESTAMP, DATE, SAMPLE. Value(s) found: {', '.join(invalid_values)}")
+                    
                     # Check the column below "Vocabulary code"
                      elif term == "Vocabulary code":
                         column_below_vocab = sheet[term_index][2:]
-                        invalid_vocab = [i + 3 for i, cell in enumerate(column_below_vocab) if cell.value is not None and not re.match(r'^\$?[A-Z0-9_.]+$', str(cell.value))]
+                        invalid_vocab = [(i + 3, cell.value) for i, cell in enumerate(column_below_vocab) if cell.value is not None and not re.match(r'^\$?[A-Z0-9_.]+$', str(cell.value))]
                         if invalid_vocab:
-                            # Append an error indicating the positions (row numbers) with invalid values for the current term
-                            errors.append(f"Error: Invalid vocabulary code found in the '{term}' column at row(s): {', '.join(map(str, invalid_vocab))}. Value found: {cell.value}")
+                            invalid_rows = [str(row) for row, _ in invalid_vocab]
+                            invalid_values = [str(value) for _, value in invalid_vocab]
+                            errors.append(f"Error: Invalid vocabulary code found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Value(s) found: {', '.join(invalid_values)}")
 
 
     # Close the workbook after use

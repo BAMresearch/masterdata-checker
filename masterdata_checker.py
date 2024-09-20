@@ -7,10 +7,9 @@ Created on Tue Nov 28 16:01:50 2023
 
 import tkinter as tk
 from tkinter import filedialog
-import re
-import openpyxl
 import getpass
 import sys
+from pybis import Openbis
 from masterdata_name_checker import name_checker
 from masterdata_content_checker import content_checker
 from masterdata_entity_checker import entity_checker
@@ -30,6 +29,10 @@ password = getpass.getpass(prompt="Please enter your password: ")
 
 # Now you have access to `username`, `instancename`, and `password`
 print(f"Username: {username}, Instance: {instance}")
+
+url = f"https://{instance}.datastore.bam.de/"
+o = Openbis(url)
+o.login(username, password, save_token=True)
 
 def open_file_dialog():
     file_path = filedialog.askopenfilename(title="Select a File")
@@ -55,12 +58,12 @@ def check_file():
     
     result_name = str(name_checker(file_name))
     if result_name != "File name: OK!":
-        result_format = "NAME CHECKS:" + "\n-------------\n" + result_name
+        result_format = "CHECKED NAME:" + "\n-------------\n" + result_name
     
     else:
         result_content = str(content_checker(file_path))
-        result_entity = str(entity_checker(file_path, username, password, instance))
-        result_format = "NAME CHECKS:" + "\n-------------\n" + result_name + "\n" + "\nCONTENT CHECKS:" + "\n-------------\n" + result_content + "\n" + "\nENTITY CHECKS" + "\n-------------\n" + result_entity
+        result_entity = str(entity_checker(file_path, o))
+        result_format = "CHECKED NAME:" + "\n-------------\n" + result_name + "\n" + "\nCHECKED CONTENT:" + "\n-------------\n" + result_content + "\n" + "\nCHECKED ENTITY" + "\n-------------\n" + result_entity
 
     # Display the result under the "Check File" button
     result_label.config(state=tk.NORMAL, height=15)
@@ -73,7 +76,7 @@ def check_file():
     
 def show_content():
     # Get the file name from the selected_file_label
-    content = generate_csv_and_download(username, password, instance)
+    content = generate_csv_and_download(o, instance)
     # Display the result under the "Check File" button
     check_button.pack_forget() 
     result_label.config(state=tk.NORMAL, height=3)

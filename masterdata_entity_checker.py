@@ -5,10 +5,8 @@ Created on Wed Dec 27 15:02:19 2023
 @author: cmadaria
 """
 import openpyxl
-from pybis import Openbis
 from masterdata_content_checker import index_to_excel_column
 import re
-import pandas as pd
 
 
 # =============================================================================
@@ -408,11 +406,11 @@ def check_prefix_sufix(file_path, o):
 
         if (len(difference) != 0) or (len(changes) != 0):
             errors.append(f"As a specification of the entity type {prefix}, the entity type {entity_code} must include all Property types of {prefix} without any changes.")
-            errors.append(f"The missing properties are: ")
+            errors.append("The missing properties are: ")
             missing = ", ".join(difference)
             errors.append(missing)
             errors.append("\n")
-            errors.append(f"The changed property attributes are: ")
+            errors.append("The changed property attributes are: ")
             changed = "\n".join(changes)
             errors.append(changed)
     
@@ -480,14 +478,14 @@ def check_prefix_prefix(o, prefix, entity_type, errors):
                         changes.append(f"Change in metadata of Property type {key}.")
 
         if (len(difference) != 0) or (len(changes) != 0):
-            errors.append(f"As a specification of the entity type {prefix}, the entity type {entity_code} must include all Property types of {prefix} without any changes.")
+            errors.append(f"As a specification of the entity type {prefix}, the entity type {suffix} must include all Property types of {prefix} without any changes.")
             missing = ", ".join(difference)
             if missing != "":
-                errors.append(f"The missing properties are: ")
+                errors.append("The missing properties are: ")
                 errors.append(missing)
             else:
-                errors.append(f"There are no missing properties")
-            errors.append(f"The changed property attributes are: ")
+                errors.append("There are no missing properties")
+            errors.append("The changed property attributes are: ")
             changed = "\n".join(changes)
             errors.append(changed)
 
@@ -496,12 +494,7 @@ def check_prefix_prefix(o, prefix, entity_type, errors):
         check_prefix_prefix(o, prefix_2, entity_type, errors)
         
         
-def entity_checker(file_path, username, password, instance):
-    
-    
-    url = f"https://{instance}.datastore.bam.de/"
-    o = Openbis(url)
-    o.login(username, password, save_token=True)
+def entity_checker(file_path, o):
     
     errors = []
     

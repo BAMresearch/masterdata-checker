@@ -5,16 +5,11 @@ Created on Tue May 21 13:35:52 2024
 @author: cmadaria
 """
 
-from pybis import Openbis
 import csv
 import os
 from datetime import datetime
 
-def generate_csv_and_download(username, password, instance):
-
-    url = f"https://{instance}.datastore.bam.de/"
-    o = Openbis(url)
-    o.login(username, password, save_token=True)
+def generate_csv_and_download(o, instance):
  
     header = ["INSTANCE", "DATE"]
     
@@ -63,7 +58,7 @@ def generate_csv_and_download(username, password, instance):
         writer = csv.writer(file)
         
         # Write the instance and date headers
-        writer.writerow(["INSTANCE", "DATE"])
+        writer.writerow(header)
         
         # Write the instance and date info
         writer.writerow(info)
