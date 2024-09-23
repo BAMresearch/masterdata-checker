@@ -122,25 +122,61 @@ def check_properties(sheet, errors):
                 column_below_section = []
                 for cell in sheet[term_letter][4:]:
                     if cell.value is not None:
-                        column_below_section.append(cell.value)
+                        column_below_section.append(cell.value) if '$' not in cell.value else column_below_section.append(cell.value.replace('$', ''))
                     else:
                         pass
-                invalid_section = [i + 5 for i, cell in enumerate(column_below_section) if not (re.match(r'^[A-Z][A-Za-z]*(?:\s[A-Z][A-Za-z]*)*$', str(cell)) or "$" in str(cell))]
-                if invalid_section:
-                    errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_section))}. Each word in the Section should start with a capital letter.")
-
+            
+                # Group Check: Ensure all properties within the same section are grouped together
                 seen_sections = {}
                 non_contiguous_rows = []
-
+                
                 for i, current_value in enumerate(column_below_section):
                     if current_value in seen_sections:
                         # If the value has been seen before but the row is not contiguous, add an error
                         if seen_sections[current_value] != i - 1:
                             non_contiguous_rows.append(i + 5)
                     seen_sections[current_value] = i  # Update the last seen row index for the current value
-
+                
                 if non_contiguous_rows:
                     errors.append(f"Error: Non-contiguous rows found for the same 'Section' value at row(s): {', '.join(map(str, non_contiguous_rows))}. Ensure that all properties within the same Section are grouped together.")
+            
+                # Predefined section order (fixed order)
+                predefined_section_order = ["General Information", "Additional Information", "Comments"]
+            
+                # Validate contiguous groups and predefined section order
+                seen_sections = set()
+                previous_section_type = None
+                section_errors = []  # Store section-specific errors
+                additional_info_seen = False  # Flag to track if "Additional Information" has been seen
+                comments_seen = False  # Flag to track if "Comments" has been seen
+            
+                # Traverse the section list
+                for i, section in enumerate(column_below_section):
+                    if section in predefined_section_order:
+                        if section == "General Information":
+                            if previous_section_type not in [None, "General Information"]:
+                                section_errors.append(f"Error at row {i + 5}: 'General Information' should only appear at the beginning.")
+                        elif section == "Additional Information":
+                            if previous_section_type not in ["General Information", "user-defined"]:
+                                section_errors.append(f"Error at row {i + 5}: 'Additional Information' should appear after 'General Information' and any user-defined sections.")
+                            additional_info_seen = True  # Mark that "Additional Information" has been encountered
+                        elif section == "Comments":
+                            if previous_section_type not in ["General Information", "user-defined", "Additional Information"]:
+                                section_errors.append(f"Error at row {i + 5}: 'Comments' should appear after 'Additional Information'.")
+                            comments_seen = True  # Mark that "Comments" has been encountered
+                        previous_section_type = section
+                    else:
+                        # User-defined section
+                        if comments_seen:
+                            section_errors.append(f"Error at row {i + 5}: User-defined section '{section}' cannot appear after 'Comments'.")
+                        if additional_info_seen and not comments_seen:
+                            section_errors.append(f"Error at row {i + 5}: User-defined section '{section}' cannot appear after 'Additional Information' but before 'Comments'.")
+                        previous_section_type = "user-defined"
+            
+                # Output any errors
+                if section_errors:
+                    for error in section_errors:
+                        errors.append(error)
             
             # Check the cell below "Property label"
              elif term == "Property label":
