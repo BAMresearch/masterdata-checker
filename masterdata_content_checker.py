@@ -140,6 +140,20 @@ def check_properties(sheet, errors):
                 invalid_label = [i + 5 for i, cell in enumerate(column_below_label) if not (re.match(r'.*', str(cell)) or "$" in str(cell))]
                 if invalid_label:
                     errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_label))}. Specify the property label as text format")
+                    
+                # Dynamically find the "Section" column
+                if "Section" in row_headers:
+                    section_index = row_headers.index("Section") + 1
+                    section_letter = index_to_excel_column(section_index)
+                    column_below_section = [cell.value for cell in sheet[section_letter][4:]]
+
+                    # New check: "Notes" in "Property label" should correspond to "Additional Information" in "Section"
+                    for i, label_value in enumerate(column_below_label):
+                        if label_value == "Notes":
+                            section_value = column_below_section[i]
+                            if section_value != "Additional Information":
+                                errors.append(f"Error: 'Notes' found in the 'Property label' column at row {i + 5}, but corresponding 'Section' column does not contain 'Additional Information'. Value found: {section_value}")
+
 
             # Check the cell below "Data type"
              elif term == "Data type":
@@ -515,6 +529,18 @@ def content_checker(file_path, name_ok):
                             invalid_rows = [str(row) for row, _ in invalid_label]
                             invalid_values = [str(value) for _, value in invalid_label]
                             errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Specify the property label as text format. Value(s) found: {', '.join(invalid_values)}")
+                         # Dynamically find the "Section" column
+                        if "Section" in second_row_values:
+                            section_column_index = second_row_values.index("Section") + 1  # Find the index of the "Section" column
+                            section_letter = index_to_excel_column(section_column_index)  # Convert index to Excel column letter
+                            column_below_section = sheet[section_letter][2:]  # Get all cells below the "Section" header
+
+                            # New check for "Notes" in "Property label" and "Additional Information" in "Section"
+                            for i, cell in enumerate(column_below_label):
+                                if cell.value == "Notes":
+                                    section_value = column_below_section[i].value  # Get the value in the "Section" column for the same row
+                                    if section_value != "Additional Information":
+                                        errors.append(f"Error: 'Notes' found in the 'Property label' column at row {i + 5}, but corresponding 'Section' column does not contain 'Additional Information'. Value found: {section_value}")
                     
                     # Check the cell below "Data type"
                      elif term == "Data type":
