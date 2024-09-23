@@ -129,6 +129,19 @@ def check_properties(sheet, errors):
                 if invalid_section:
                     errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_section))}. Each word in the Section should start with a capital letter.")
 
+                seen_sections = {}
+                non_contiguous_rows = []
+
+                for i, current_value in enumerate(column_below_section):
+                    if current_value in seen_sections:
+                        # If the value has been seen before but the row is not contiguous, add an error
+                        if seen_sections[current_value] != i - 1:
+                            non_contiguous_rows.append(i + 5)
+                    seen_sections[current_value] = i  # Update the last seen row index for the current value
+
+                if non_contiguous_rows:
+                    errors.append(f"Error: Non-contiguous rows found for the same 'Section' value at row(s): {', '.join(map(str, non_contiguous_rows))}. Ensure that all properties within the same Section are grouped together.")
+            
             # Check the cell below "Property label"
              elif term == "Property label":
                 column_below_label = []
@@ -521,6 +534,19 @@ def content_checker(file_path, name_ok):
                             invalid_values = [str(value) for _, value in invalid_section]
                             errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Each word should start with a capital letter. Value(s) found: {', '.join(invalid_values)}")
                     
+                        seen_sections = {}
+                        non_contiguous_rows = []
+
+                        for i, current_value in enumerate(column_below_section):
+                            if current_value in seen_sections:
+                                # If the value has been seen before but the row is not contiguous, add an error
+                                if seen_sections[current_value] != i - 1:
+                                    non_contiguous_rows.append(i + 5)
+                            seen_sections[current_value] = i  # Update the last seen row index for the current value
+
+                        if non_contiguous_rows:
+                            errors.append(f"Error: Non-contiguous rows found for the same 'Section' value at row(s): {', '.join(map(str, non_contiguous_rows))}. Ensure that all properties within the same Section are grouped together.")
+            
                     # Check the cell below "Property label"
                      elif term == "Property label":
                         column_below_label = sheet[term_index][2:]
