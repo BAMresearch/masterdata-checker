@@ -14,22 +14,29 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title text-center">File Uploader</h5>
-                        <form method="POST">
+                        <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="formFile" class="form-label">Select a File:</label>
-                                <input class="form-control" type="file" id="formFile" disabled>
+                                <input class="form-control" type="file" id="formFile" name="file" accept=".xls, .xlsx" required>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <button type="submit" name="upload" class="btn btn-primary">Select File...</button>
-                                <button type="submit" name="check_instance" class="btn btn-secondary">Check Instance</button>
+                                <button type="submit" name="upload" class="btn btn-primary">Check Masterdata</button>
                             </div>
                         </form>
-
-                        <!-- Message Display -->
-                        {% if message %}
+                        <!-- Display the uploaded file name -->
+                        {% if file_name %}
                             <div class="alert alert-info mt-3" role="alert">
-                                {{ message }}
+                                <strong>{{ file_name }}</strong> <!-- 'linebreaks' is a Django template filter that converts newlines in <br> tags -->
+                            </div>
+                        {% endif %}
+                        {% if result %}
+                            <div class="alert alert-info mt-3" role="alert">
+                                {{ result|safe|linebreaks }} <!-- 'linebreaks' is a Django template filter that converts newlines in <br> tags -->
+                            </div>
+                        {% elif error %}
+                            <div class="alert alert-danger mt-3" role="alert">
+                                {{ error|linebreaks|safe }} <!-- 'safe' is a Django template filter that prevents escaping the HTML, so the <br> f.e. will be rendered properly -->
                             </div>
                         {% endif %}
                     </div>
