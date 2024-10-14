@@ -1439,3 +1439,37 @@ INFO 2024-10-10 17:08:07,185 utils Type <class 'django.core.files.uploadedfile.I
 INFO 2024-10-10 17:08:07,281 views Type <class 'str'> of file object_type_CHEMICAL_v1_S.3_cmadaria.xlsx
 INFO 2024-10-10 17:08:27,942 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file object_type_CHEMICAL_v1_S.3_cmadaria.xlsx
 INFO 2024-10-10 17:08:27,963 views Type <class 'str'> of file object_type_CHEMICAL_v1_S.3_cmadaria.xlsx
+INFO 2024-10-14 13:10:41,916 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file object_type_TR-TH_4-3_4.6_t[] - Copy.xlsx
+INFO 2024-10-14 13:10:42,351 views Type <class 'str'> of file object_type_TR-TH_4-3_4.6_t[] - Copy.xlsx
+INFO 2024-10-14 13:29:40,068 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file object_type_TR-TH_4-3_4.6_t[] - Copy.xlsx
+INFO 2024-10-14 13:29:55,968 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file object_type_CENTIFUGE_ROTOR_v1_1.0_bruehle.xlsx
+INFO 2024-10-14 13:30:16,699 views Type <class 'str'> of file object_type_CENTIFUGE_ROTOR_v1_1.0_bruehle.xlsx
+INFO 2024-10-14 13:30:34,644 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file object_type_CHEMICAL_v1_S.3_cmadaria.xlsx
+INFO 2024-10-14 13:30:38,851 views Type <class 'str'> of file object_type_CHEMICAL_v1_S.3_cmadaria.xlsx
+INFO 2024-10-14 13:31:06,736 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file object_type_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 13:52:49,299 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file object_type_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 13:53:34,610 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 13:59:41,480 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:04:14,953 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:04:50,619 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:05:18,362 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:16:27,810 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:18:37,562 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:19:23,644 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:21:17,137 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:22:25,221 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:24:28,550 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:25:03,328 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:25:49,002 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:33:57,404 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:37:34,582 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:38:02,772 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:40:31,716 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:41:34,193 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 14:42:21,686 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 15:04:23,347 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 15:04:23,634 views Type <class 'str'> of file space_TR-TH_4-3_5=5_t[].xlsx
+INFO 2024-10-14 15:06:56,742 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file object_type_MYSTICAL_v1_S.3_cmadaria.xlsx
+INFO 2024-10-14 15:07:20,100 views Type <class 'str'> of file object_type_MYSTICAL_v1_S.3_cmadaria.xlsx
+INFO 2024-10-14 15:08:17,710 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file object_type_CHEMICAL_v1_S.3_cmadaria.xlsx
+INFO 2024-10-14 15:08:23,430 views Type <class 'str'> of file object_type_CHEMICAL_v1_S.3_cmadaria.xlsx
