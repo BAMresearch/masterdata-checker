@@ -8,6 +8,9 @@ Created on Thu Oct 10
 import re
 import openpyxl
 import logging
+import csv
+import io
+from datetime import datetime
 
 logger = logging.getLogger('myapp')
 
@@ -18,39 +21,39 @@ def name_checker(file_name):
     # Check if the file name matches the pattern
     match = re.match(pattern, file_name)
 
+    # Return specific errors and positions
+    errors = []
+    file_name = file_name.split(".xls")
+    file_parts = file_name[0].split("_")
+    if len(file_parts) < 5:
+        errors.append("⦿ <strong>Invalid name format</strong>. The name should contain different fields separated by underscores (_). Consult the wiki to see which ones.")
+        return ["\n".join(errors), file_name, False]
+    creator = file_parts.pop(-1)
+    section = file_parts.pop(-1)
+    version = file_parts.pop(-1)
+    etype = file_parts.pop(0)
+    if (etype == "object" or etype == "collection" or etype == "dataset"):
+        etype = etype + "_" + file_parts.pop(0)
+    code = "_".join(file_parts)
+
     if match:
         # Extract parts of the file name
         entity_type, entity_name, version, division, contact_person, extension = match.groups()
         print(entity_type, entity_name, version, division, contact_person, extension)
-        return ["<strong>File name: OK!</strong>", True]
-    else:
-        # Return specific errors and positions
-        errors = []
-        file_name = file_name.split(".xls")
-        file_parts = file_name[0].split("_")
-        if len(file_parts) < 5:
-            errors.append("<strong>Invalid name format</strong>. The name should contain different fields separated by underscores (_). Consult the wiki to see which ones.")
-            return ["\n".join(errors), False]
-        creator = file_parts.pop(-1)
-        section = file_parts.pop(-1)
-        version = file_parts.pop(-1)
-        etype = file_parts.pop(0)
-        if (etype == "object" or etype == "collection" or etype == "dataset"):
-            etype = etype + "_" + file_parts.pop(0)
-        code = "_".join(file_parts)
-            
+        return ["⦿ <strong>File name: OK!</strong>", code, True]
+    else:   
         if not re.match(r"^(collection_type|object_type|dataset_type|vocabulary)$", etype):
-            errors.append("<strong>Invalid entity type</strong> at position 1.")
+            errors.append("⦿ <strong>Invalid entity type</strong> at position 1.")
         if not re.match(r"^([\w.]+)$", code):
-            errors.append("<strong>Invalid entity name</strong> at position 2.")
+            errors.append("⦿ <strong>Invalid entity name</strong> at position 2.")
         if not re.match(r"^(v\d+)$", version):
-            errors.append("<strong>Invalid version</strong> at position 3.")
+            errors.append("⦿ <strong>Invalid version</strong> at position 3.")
         if not re.match(r"^([a-zA-Z0-9]+(?:\.[0-9]+)?)$", section):
-            errors.append("<strong>Invalid division</strong> at position 4.")
+            errors.append("⦿ <strong>Invalid division</strong> at position 4.")
         if not re.match(r"^[a-zA-Z0-9]+$", creator):
-            errors.append("<strong>Invalid contact person</strong> at position 5.")
+            errors.append("⦿ <strong>Invalid contact person</strong> at position 5.")
             
-        return ["\n".join(errors), False]
+        return ["\n".join(errors), code, False]
     
 
 def index_to_excel_column(index):
@@ -77,9 +80,9 @@ def check_properties(sheet, errors):
     for term in expected_terms:
         if (term not in row_headers):
             if term in ("Mandatory","Show in edit views","Section"):
-                errors.append(f"<em>Warning</em>: '{term}' not found in the properties headers.")
+                errors.append(f"⦿ <em>Warning</em>: '{term}' not found in the properties headers.")
             else:
-                errors.append(f"<strong>Error</strong>: '{term}' not found in the properties headers.")
+                errors.append(f"⦿ <strong>Error</strong>: '{term}' not found in the properties headers.")
         else:
              # Find the index of the term in the second row
              term_index = row_headers.index(term) + 1
@@ -393,7 +396,7 @@ def content_checker(file_name, name_ok):
     
     entity_types = ["SAMPLE_TYPE", "EXPERIMENT_TYPE", "DATASET_TYPE", "PROPERTY_TYPE", "VOCABULARY_TYPE"]
     if cell_value_A1 not in entity_types:
-        errors.append("The entity type (cell A1) should be one of the following: SAMPLE_TYPE, EXPERIMENT_TYPE, DATASET_TYPE, PROPERTY_TYPE, VOCABULARY_TYPE")
+        errors.append("⦿ The entity type (cell A1) should be one of the following: SAMPLE_TYPE, EXPERIMENT_TYPE, DATASET_TYPE, PROPERTY_TYPE, VOCABULARY_TYPE")
         return "".join(errors)
     else:
         if cell_value_A1 == "SAMPLE_TYPE":
@@ -423,7 +426,7 @@ def content_checker(file_name, name_ok):
                      elif term == "Code":
                         cell_below_code = sheet.cell(row=3, column=term_index + 1)
                         if cell_below_code.value != code:
-                            errors.append("<strong>Error</strong>: The code should be the same one indicated in the file name")
+                            errors.append("⦿ <strong>Error</strong>: The code should be the same one indicated in the file name")
                     
                     
                     # Check the cell below "Description"
@@ -713,7 +716,7 @@ def content_checker(file_name, name_ok):
     # Close the workbook after use
     workbook.close()
     if type(errors) == list:
-        output = "\n".join(errors)
+        output = "\n\n⦿ ".join(errors)
     else:
         output = "".join(errors)
     if output == "":
@@ -867,7 +870,7 @@ def check_entity_same_code(file_path, o, openbis_entity):
 
     #check if the properties lists are the same
     if sorted(entity_properties) != sorted(openbis_entity_properties):
-        errors.append(f"The set of Property Types assigned to the ('{entity_type}') '{entity_code}' has been changed compared to the previous version.")
+        errors.append(f"⦿ The set of Property Types assigned to the ('{entity_type}') '{entity_code}' has been changed compared to the previous version.")
 
             
     #check which properties has been added and removed
@@ -999,7 +1002,7 @@ def check_entity_same_code(file_path, o, openbis_entity):
         
     workbook.close()
     
-    return "\n".join(errors)
+    return "\n\n⦿ ".join(errors)
         
 def check_entity_diff_code(file_path, o):
     errors = []
@@ -1039,7 +1042,7 @@ def check_entity_diff_code(file_path, o):
         if set(prop_list) == set(entity_properties):
             errors.append(f"The {entity_type} '{entity_code}' is very similar to the existing {entity_type} '{key}'. Please consider whether you need to create a new entity type or whether you can re-use '{key}'")
     
-    return "\n".join(errors)
+    return "\n\n⦿ ".join(errors)
 
 
 def check_prefix_sufix(file_path, o):
@@ -1050,7 +1053,7 @@ def check_prefix_sufix(file_path, o):
     entity_type = sheet['A1'].value
 
     if(entity_type) == "VOCABULARY_TYPE":
-        return "\n".join(errors)
+        return "\n\n⦿ ".join(errors)
     
     entity_headers = [cell.value for cell in sheet[2]]
     term_index = entity_headers.index("Code") + 1
@@ -1075,8 +1078,8 @@ def check_prefix_sufix(file_path, o):
         try:
             prefix_entity = search_entity(o, entity_type, prefix)
         except ValueError as e:
-            errors.append(f"Entity type '{prefix}' is not present in the system, and cannot be the prefix of a new entity to be registered.")
-            return "\n".join(errors)
+            errors.append(f"⦿ Entity type '{prefix}' is not present in the system, and cannot be the prefix of a new entity to be registered.")
+            return "\n\n⦿ ".join(errors)
         
         prefix_properties = []
         for prop in prefix_entity.get_property_assignments():
@@ -1139,7 +1142,7 @@ def check_prefix_sufix(file_path, o):
         check_prefix_prefix(o, prefix, entity_type, errors)
     
     
-    return "\n".join(errors)
+    return "\n\n⦿ ".join(errors)
 
 
 def check_prefix_prefix(o, prefix, entity_type, errors):
@@ -1207,7 +1210,7 @@ def check_prefix_prefix(o, prefix, entity_type, errors):
             else:
                 errors.append("There are no missing properties")
             errors.append("The changed property attributes are: ")
-            changed = "\n".join(changes)
+            changed = "\n\n⦿ ".join(changes)
             errors.append(changed)
 
 
@@ -1229,12 +1232,12 @@ def entity_checker(file_path, o):
     try:
         openbis_entity = search_entity(o, entity_type, entity_code)
     except ValueError as e:
-        errors.append(f"Entity type '{entity_code}' is a new entity type (not present in the system) to be registered.")
+        errors.append(f"⦿ Entity type '{entity_code}' is a new entity type (not present in the system) to be registered.")
         openbis_entity = ""
     
         
     if (openbis_entity != ""):
-        errors.append(f"Entity type '{entity_code}' already exists.")
+        errors.append(f"⦿ Entity type '{entity_code}' already exists.")
         same_code_errors = check_entity_same_code(file_path, o, openbis_entity)
         errors.append(same_code_errors)
     else:
@@ -1245,4 +1248,104 @@ def entity_checker(file_path, o):
     errors.append(prefix_errors)
     
     
-    return "\n".join(errors)
+    return "\n\n".join(errors)
+
+def generate_csv_and_download(o, instance):
+    """
+    Generates CSV in-memory and returns the rows and in-memory CSV content.
+    """
+    # Use StringIO to generate CSV data in memory
+    csv_file = io.StringIO()
+
+    header = ["INSTANCE", "DATE"]
+    current_date = datetime.now().strftime("%d-%m-%Y")
+    info = [instance, current_date]
+
+    # Fetch data from the server (using pybis)
+    spaces = [space for space in o.get_spaces()]
+    projects = [project.code for project in o.get_projects()]
+    experiment_types = [exp for exp in o.get_experiment_types()]
+    object_types = [obj for obj in o.get_object_types() if obj.code != "UNKNOWN"]
+    material_types = [material for material in o.get_material_types()]
+    dataset_types = [dataset for dataset in o.get_dataset_types()]
+    vocabs = [vocab.code for vocab in o.get_vocabularies()]
+    plugins = [plug.name for plug in o.get_plugins()]
+
+    masterdata_headers = [
+        f"SPACES ({len(spaces)})", f"PROJECTS ({len(projects)})", f"EXPERIMENT TYPES ({len(experiment_types)})",
+        f"OBJECT TYPES ({len(object_types)})", f"DATASET TYPES ({len(dataset_types)})",
+        f"VOCABULARIES ({len(vocabs)})", f"PLUGINS ({len(plugins)})", f"MATERIAL TYPES ({len(material_types)})"
+    ]
+
+    masterdata = [
+        spaces,
+        projects,
+        experiment_types,
+        object_types,
+        dataset_types,
+        vocabs,
+        plugins,
+        material_types
+    ]
+
+    csv_rows = []
+    writer = csv.writer(csv_file)
+
+    # Write headers and store them for live display
+    writer.writerow(header)
+    csv_rows.append(header)
+
+    # Write instance info and store
+    writer.writerow(info)
+    csv_rows.append(info)
+
+    # Write an empty row and store
+    writer.writerow("")
+    csv_rows.append("")
+
+    # Write the master data headers
+    writer.writerow(masterdata_headers)
+    csv_rows.append(masterdata_headers)
+
+    # Write master data rows and store for live display
+    max_length = max(len(data) for data in masterdata)
+    for i in range(max_length):
+        row = [data[i] if i < len(data) else "" for data in masterdata]
+        writer.writerow(row)
+        csv_rows.append(row)
+
+    # Write empty row for separating sections
+    writer.writerow("")
+    csv_rows.append("")
+
+    # Write object types
+    writer.writerow(["PROPERTY LIST BY OBJECT TYPE"])
+    csv_rows.append(["PROPERTY LIST BY OBJECT TYPE"])
+
+    # Write object types
+    writer.writerow(object_types)
+    csv_rows.append(object_types)
+
+    # Generate object properties by type
+    props_by_obj = []
+    for obj in object_types:
+        if obj.code == "UNKNOWN":
+            continue
+        props = []
+        assignments_df = obj.get_property_assignments().df
+        if 'propertyType' in assignments_df.columns:
+            for prop in obj.get_property_assignments():
+                props.append(f"{prop.code} ({str(prop.dataType).lower()})")
+        props_by_obj.append(props)
+
+    # Determine the maximum length of the object properties
+    max_length_props = max(len(properties) for properties in props_by_obj)
+
+    # Write object properties row by row
+    for i in range(max_length_props):
+        row = [prop_list[i] if i < len(prop_list) else "" for prop_list in props_by_obj]
+        writer.writerow(row)
+        csv_rows.append(row)
+
+    # Return CSV content and rows for display
+    return csv_rows, csv_file.getvalue()

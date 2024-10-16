@@ -23,6 +23,7 @@ from myapp import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', views.homepage, name='homepage'),
+    path('visualizer/', views.masterdata_visualizer, name='masterdata_visualizer'),
 ]
 
 if settings.DEBUG:

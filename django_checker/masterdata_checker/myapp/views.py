@@ -17,12 +17,11 @@ def homepage(request):
                     
                     url = f"https://devel.datastore.bam.de/"
                     o = Openbis(url)
-                    o.login("cmadaria", "psswd", save_token=True)
+                    o.login("cmadaria", "Berlin.2024", save_token=True)
                     
                     file_name = uploaded_file.name
 
-                    result_name = name_checker(file_name)[0]
-                    name_ok = name_checker(file_name)[1]
+                    result_name, code, name_ok = name_checker(file_name)
                     result_content = str(content_checker(uploaded_file, name_ok))
                     result_entity = str(entity_checker(uploaded_file, o))
                     logger.info(f"Type {type(file_name)} of file {file_name}")
@@ -31,6 +30,7 @@ def homepage(request):
 
                     context["result"] = result_format
                     context["file_name"] = file_name
+                    context["code"] = code
 
                 except Exception as e:
                     context["error"] = f"Error processing file: {str(e)}"
@@ -38,3 +38,6 @@ def homepage(request):
                 context["error"] = "Invalid file type. Only .xls and .xlsx files are allowed."
 
     return render(request, 'homepage.html', context)
+
+def masterdata_visualizer(request):
+    return render(request, 'homepage.html', {'page': 'visualizer'})
