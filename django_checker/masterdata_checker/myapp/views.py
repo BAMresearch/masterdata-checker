@@ -1,6 +1,7 @@
 from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
 from pybis import Openbis
-from myapp.utils import name_checker, content_checker, entity_checker
+from myapp.utils import name_checker, content_checker, entity_checker, generate_csv_and_download
 import logging
 
 # Get an instance of the logger for the app (replace 'myapp' with your app name)
@@ -39,5 +40,38 @@ def homepage(request):
 
     return render(request, 'homepage.html', context)
 
-def masterdata_visualizer(request):
-    return render(request, 'homepage.html', {'page': 'visualizer'})
+# View to handle instance check and CSV generation
+def check_instance(request):
+    if request.method == 'POST':
+        instance = request.POST.get('instance')
+
+        # Simulate fetching data from the OpenBIS instance
+        url = f"https://devel.datastore.bam.de/"
+        o = Openbis(url)
+        o.login("cmadaria", "Berlin.2024", save_token=True)
+
+        # Generate CSV data and capture the rows being written
+        csv_rows, csv_file, masterdata = generate_csv_and_download(o, instance)
+
+        # Store the CSV content in the session for later download
+        request.session[instance] = csv_file
+        request.session[f'{instance}_masterdata'] = masterdata
+
+        # Return the rows back to the client for display
+        return JsonResponse({
+            'rows': csv_rows,  # This is JSON serializable (a list of lists)
+            'csv_file': instance,  # The filename is just the instance name
+            'masterdata': masterdata
+        })
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+# View to handle the CSV file download (in memory)
+def download_csv(request, filename):
+    csv_file = request.session.get(filename)  # Retrieve the in-memory CSV file from the session
+    if csv_file:
+        response = HttpResponse(csv_file, content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="{filename}.csv"'
+        return response
+    else:
+        return HttpResponse('File not found', status=404)

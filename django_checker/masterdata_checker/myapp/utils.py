@@ -1254,20 +1254,21 @@ def generate_csv_and_download(o, instance):
     """
     Generates CSV in-memory and returns the rows and in-memory CSV content.
     """
-    # Use StringIO to generate CSV data in memory
+
     csv_file = io.StringIO()
+    writer = csv.writer(csv_file)
 
     header = ["INSTANCE", "DATE"]
     current_date = datetime.now().strftime("%d-%m-%Y")
     info = [instance, current_date]
 
-    # Fetch data from the server (using pybis)
-    spaces = [space for space in o.get_spaces()]
+    # Fetch data from the server (using pybis) and serialize
+    spaces = [space.code for space in o.get_spaces()]  # Convert Space objects to simple strings
     projects = [project.code for project in o.get_projects()]
-    experiment_types = [exp for exp in o.get_experiment_types()]
-    object_types = [obj for obj in o.get_object_types() if obj.code != "UNKNOWN"]
-    material_types = [material for material in o.get_material_types()]
-    dataset_types = [dataset for dataset in o.get_dataset_types()]
+    experiment_types = [exp.code for exp in o.get_experiment_types()]
+    object_types = [obj.code for obj in o.get_object_types() if obj.code != "UNKNOWN"]
+    material_types = [material.code for material in o.get_material_types()]
+    dataset_types = [dataset.code for dataset in o.get_dataset_types()]
     vocabs = [vocab.code for vocab in o.get_vocabularies()]
     plugins = [plug.name for plug in o.get_plugins()]
 
@@ -1278,6 +1279,7 @@ def generate_csv_and_download(o, instance):
     ]
 
     masterdata = [
+        current_date,
         spaces,
         projects,
         experiment_types,
@@ -1289,17 +1291,15 @@ def generate_csv_and_download(o, instance):
     ]
 
     csv_rows = []
-    writer = csv.writer(csv_file)
 
-    # Write headers and store them for live display
+    # Write headers
     writer.writerow(header)
-    csv_rows.append(header)
 
-    # Write instance info and store
+    # Write instance info
     writer.writerow(info)
     csv_rows.append(info)
 
-    # Write an empty row and store
+    # Write an empty row
     writer.writerow("")
     csv_rows.append("")
 
@@ -1307,18 +1307,18 @@ def generate_csv_and_download(o, instance):
     writer.writerow(masterdata_headers)
     csv_rows.append(masterdata_headers)
 
-    # Write master data rows and store for live display
+    # Write master data rows
     max_length = max(len(data) for data in masterdata)
     for i in range(max_length):
         row = [data[i] if i < len(data) else "" for data in masterdata]
         writer.writerow(row)
         csv_rows.append(row)
 
-    # Write empty row for separating sections
+     # Write empty row for separating sections
     writer.writerow("")
     csv_rows.append("")
 
-    # Write object types
+    # Restoring the part that writes object properties by type
     writer.writerow(["PROPERTY LIST BY OBJECT TYPE"])
     csv_rows.append(["PROPERTY LIST BY OBJECT TYPE"])
 
@@ -1326,9 +1326,8 @@ def generate_csv_and_download(o, instance):
     writer.writerow(object_types)
     csv_rows.append(object_types)
 
-    # Generate object properties by type
     props_by_obj = []
-    for obj in object_types:
+    for obj in o.get_object_types():
         if obj.code == "UNKNOWN":
             continue
         props = []
@@ -1347,5 +1346,19 @@ def generate_csv_and_download(o, instance):
         writer.writerow(row)
         csv_rows.append(row)
 
+    # Prepare masterdata, including current date first
+    masterdata_dict = {
+        "current_date": current_date,
+        "spaces": spaces,
+        "projects": projects,
+        "experiment_types": experiment_types,
+        "object_types": object_types,
+        "dataset_types": dataset_types,
+        "vocabs": vocabs,
+        "plugins": plugins,
+        "material_types": material_types,
+        "props_by_obj": props_by_obj
+    }
+
     # Return CSV content and rows for display
-    return csv_rows, csv_file.getvalue()
+    return csv_rows, csv_file.getvalue(), masterdata_dict
