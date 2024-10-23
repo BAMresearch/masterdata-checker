@@ -25,6 +25,12 @@
     </style>
 </head>
 <body class="bg-light">
+    <div class="d-flex justify-content-end"></div>
+            <form action="{% url 'logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+        </div>
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-8">

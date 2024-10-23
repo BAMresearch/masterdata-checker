@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from cryptography.fernet import Fernet
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,6 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-wiq2-hvjf4#jgoq-&#rg!)hw*(wa9l9^&cgcohq8k6ihitx9f#"
+
+# Use the generated key (securely store this key in production, e.g., as an environment variable)
+SECRET_ENCRYPTION_KEY = b'I5_ZiuaIcA-hALnZx1Nxq9AtEUpvjuVefWYfAlGqEfI='
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -100,6 +104,14 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+# Settings for session cookies
+SESSION_COOKIE_SECURE = True  # Ensures cookies are only sent over HTTPS
+SESSION_COOKIE_HTTPONLY = True  # Prevents JavaScript access to cookies (XSS protection)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire sessions when browser closes
+
+# Set session timeout
+SESSION_COOKIE_AGE = 3600  # Session expires after 1 hour (3600 seconds)
 
 
 # Internationalization

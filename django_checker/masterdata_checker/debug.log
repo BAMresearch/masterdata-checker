@@ -1741,3 +1741,231 @@ INFO 2024-10-17 16:46:31,230 utils Type <class 'django.core.files.uploadedfile.I
 INFO 2024-10-17 16:46:33,449 views Type <class 'str'> of file object_type_CHEMICAL_v1_S.3_cmadaria.xlsx
 INFO 2024-10-17 16:47:29,625 utils Type <class 'django.core.files.uploadedfile.InMemoryUploadedFile'> of file object_type_CHEMICAL_v1_S.3_cmadaria.xlsx
 INFO 2024-10-17 16:47:32,039 views Type <class 'str'> of file object_type_CHEMICAL_v1_S.3_cmadaria.xlsx
+WARNING 2024-10-23 12:46:56,257 log Not Found: /favicon.ico
+WARNING 2024-10-23 12:46:56,261 basehttp "GET /favicon.ico HTTP/1.1" 404 3348
+ERROR 2024-10-23 13:28:21,222 log Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 116, in _get_unverified_token_data
+    data = base64.urlsafe_b64decode(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 133, in urlsafe_b64decode
+    return b64decode(s)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 87, in b64decode
+    return binascii.a2b_base64(s)
+binascii.Error: Incorrect padding
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\views.py", line 22, in homepage
+    password = decrypt_password(encrypted_password)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 29, in decrypt_password
+    decrypted_password = cipher_suite.decrypt(encrypted_password.encode('utf-8'))
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 85, in decrypt
+    timestamp, data = Fernet._get_unverified_token_data(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 118, in _get_unverified_token_data
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+ERROR 2024-10-23 13:28:21,237 basehttp "GET / HTTP/1.1" 500 95496
+ERROR 2024-10-23 13:32:22,764 log Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 116, in _get_unverified_token_data
+    data = base64.urlsafe_b64decode(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 133, in urlsafe_b64decode
+    return b64decode(s)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 87, in b64decode
+    return binascii.a2b_base64(s)
+binascii.Error: Incorrect padding
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\views.py", line 22, in homepage
+    password = decrypt_password(encrypted_password)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 34, in decrypt_password
+    raise e
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 30, in decrypt_password
+    decrypted_password = cipher_suite.decrypt(encrypted_password.encode('utf-8'))
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 85, in decrypt
+    timestamp, data = Fernet._get_unverified_token_data(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 118, in _get_unverified_token_data
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+ERROR 2024-10-23 13:32:22,781 basehttp "GET / HTTP/1.1" 500 99038
+ERROR 2024-10-23 13:35:08,620 log Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 116, in _get_unverified_token_data
+    data = base64.urlsafe_b64decode(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 133, in urlsafe_b64decode
+    return b64decode(s)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 87, in b64decode
+    return binascii.a2b_base64(s)
+binascii.Error: Incorrect padding
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 40, in decrypt_password
+    decrypted_password = cipher_suite.decrypt(encrypted_password.encode('utf-8'))
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 85, in decrypt
+    timestamp, data = Fernet._get_unverified_token_data(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 118, in _get_unverified_token_data
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\views.py", line 22, in homepage
+    password = decrypt_password(encrypted_password)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 44, in decrypt_password
+    raise InvalidToken("Decryption failed due to an invalid token.")
+cryptography.fernet.InvalidToken: Decryption failed due to an invalid token.
+ERROR 2024-10-23 13:35:08,640 basehttp "GET / HTTP/1.1" 500 99774
+ERROR 2024-10-23 13:45:14,707 log Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 116, in _get_unverified_token_data
+    data = base64.urlsafe_b64decode(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 133, in urlsafe_b64decode
+    return b64decode(s)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 87, in b64decode
+    return binascii.a2b_base64(s)
+binascii.Error: Incorrect padding
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 40, in decrypt_password
+    decrypted_password = cipher_suite.decrypt(encrypted_password.encode('utf-8'))
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 85, in decrypt
+    timestamp, data = Fernet._get_unverified_token_data(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 118, in _get_unverified_token_data
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\views.py", line 22, in homepage
+    password = decrypt_password(encrypted_password)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 44, in decrypt_password
+    raise InvalidToken("Decryption failed due to an invalid token.")
+cryptography.fernet.InvalidToken: Decryption failed due to an invalid token.
+ERROR 2024-10-23 13:45:14,724 basehttp "GET / HTTP/1.1" 500 99774
+ERROR 2024-10-23 13:53:06,422 log Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 116, in _get_unverified_token_data
+    data = base64.urlsafe_b64decode(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 133, in urlsafe_b64decode
+    return b64decode(s)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 87, in b64decode
+    return binascii.a2b_base64(s)
+binascii.Error: Incorrect padding
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 31, in decrypt_password
+    decrypted_password = cipher_suite.decrypt(encrypted_password.encode('utf-8'))
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 85, in decrypt
+    timestamp, data = Fernet._get_unverified_token_data(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 118, in _get_unverified_token_data
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\views.py", line 22, in homepage
+    password = decrypt_password(encrypted_password)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 35, in decrypt_password
+    raise InvalidToken("Decryption failed due to an invalid token.")
+cryptography.fernet.InvalidToken: Decryption failed due to an invalid token.
+ERROR 2024-10-23 13:53:06,437 basehttp "GET / HTTP/1.1" 500 99848
+ERROR 2024-10-23 13:53:54,542 log Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 116, in _get_unverified_token_data
+    data = base64.urlsafe_b64decode(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 133, in urlsafe_b64decode
+    return b64decode(s)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 87, in b64decode
+    return binascii.a2b_base64(s)
+binascii.Error: Incorrect padding
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 31, in decrypt_password
+    decrypted_password = cipher_suite.decrypt(encrypted_password.encode('utf-8'))
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 85, in decrypt
+    timestamp, data = Fernet._get_unverified_token_data(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 118, in _get_unverified_token_data
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\views.py", line 22, in homepage
+    password = decrypt_password(encrypted_password)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 35, in decrypt_password
+    raise InvalidToken("Decryption failed due to an invalid token.")
+cryptography.fernet.InvalidToken: Decryption failed due to an invalid token.
+ERROR 2024-10-23 13:53:54,580 basehttp "GET / HTTP/1.1" 500 99554
+ERROR 2024-10-23 13:55:57,726 log Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 116, in _get_unverified_token_data
+    data = base64.urlsafe_b64decode(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 133, in urlsafe_b64decode
+    return b64decode(s)
+  File "C:\Users\cmadaria\Miniconda3\lib\base64.py", line 87, in b64decode
+    return binascii.a2b_base64(s)
+binascii.Error: Incorrect padding
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 33, in decrypt_password
+    decrypted_password = cipher_suite.decrypt(encrypted_password.encode('utf-8'))
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 85, in decrypt
+    timestamp, data = Fernet._get_unverified_token_data(token)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\cryptography\fernet.py", line 118, in _get_unverified_token_data
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\cmadaria\Miniconda3\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\views.py", line 22, in homepage
+    password = decrypt_password(encrypted_password)
+  File "C:\Users\cmadaria\Documents\Projects\Masterdata Checker\django_checker\masterdata_checker\myapp\utils.py", line 37, in decrypt_password
+    raise InvalidToken("Decryption failed due to an invalid token.")
+cryptography.fernet.InvalidToken: Decryption failed due to an invalid token.
+ERROR 2024-10-23 13:55:57,757 basehttp "GET / HTTP/1.1" 500 99713

@@ -25,6 +25,8 @@ urlpatterns = [
     path('', views.homepage, name='homepage'),
     path('check_instance/', views.check_instance, name='check_instance'),
     path('download_csv/<str:filename>/', views.download_csv, name='download_csv'),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout_view, name='logout'),
 
 ]
 

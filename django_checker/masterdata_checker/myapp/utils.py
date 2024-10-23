@@ -10,9 +10,33 @@ import openpyxl
 import logging
 import csv
 import io
+import base64
 from datetime import datetime
+from cryptography.fernet import Fernet, InvalidToken
+from django.conf import settings
 
 logger = logging.getLogger('myapp')
+
+# Instantiate the Fernet class with the secret key
+cipher_suite = Fernet(settings.SECRET_ENCRYPTION_KEY)
+
+# Encrypt the password
+def encrypt_password(plain_text_password):
+    encrypted_password = cipher_suite.encrypt(plain_text_password.encode('utf-8'))
+    return encrypted_password.decode('utf-8')  # Return as a string
+
+def decrypt_password(encrypted_password):
+    try:
+        # Remove the manual padding correction, Fernet handles it automatically
+        decrypted_password = cipher_suite.decrypt(encrypted_password.encode('utf-8'))
+        return decrypted_password.decode('utf-8')
+    except InvalidToken as e:
+        print(f"Decryption failed: {str(e)}")
+        raise InvalidToken("Decryption failed due to an invalid token.")
+    except Exception as e:
+        print(f"Decryption error: {str(e)}")
+        raise e
+
 
 def name_checker(file_name):
     # Define the pattern for a valid file name
