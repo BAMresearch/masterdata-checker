@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-wiq2-hvjf4#jgoq-&#rg!)hw*(wa9l9^&cgcohq8k6ihitx9f#"
 
 # Use the generated key (securely store this key in production, e.g., as an environment variable)
-SECRET_ENCRYPTION_KEY = b'I5_ZiuaIcA-hALnZx1Nxq9AtEUpvjuVefWYfAlGqEfI='
+SECRET_ENCRYPTION_KEY = b'generated_key'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
