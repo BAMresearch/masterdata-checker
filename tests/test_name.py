@@ -2,7 +2,6 @@ import pytest
 
 from masterdata_checker.name import name_checker
 
-
 # @pytest.mark.parametrize(
 #     'file_path, result',
 #     [
