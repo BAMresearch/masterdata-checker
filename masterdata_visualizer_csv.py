@@ -5,20 +5,13 @@ Created on Tue May 21 13:35:52 2024
 @author: cmadaria
 """
 
-from pybis_connection import connect
 import csv
 import os
 from datetime import datetime
 
-def generate_csv_and_download():
-
-    o = connect('serverA')
-    
-    url = o.url
-    
+def generate_csv_and_download(o, instance):
+ 
     header = ["INSTANCE", "DATE"]
-    
-    instance = url.split("//")[1].split(".")[0]
     
     current_date = datetime.now().strftime("%d-%m-%Y")
     
@@ -65,7 +58,7 @@ def generate_csv_and_download():
         writer = csv.writer(file)
         
         # Write the instance and date headers
-        writer.writerow(["INSTANCE", "DATE"])
+        writer.writerow(header)
         
         # Write the instance and date info
         writer.writerow(info)
@@ -103,8 +96,11 @@ def generate_csv_and_download():
             if obj.code == "UNKNOWN":
                 continue
             props = []
-            for prop in obj.get_property_assignments():
-                props.append(f"{prop.code} ({str(prop.dataType).lower()})")
+            
+            assignments_df = obj.get_property_assignments().df
+            if 'propertyType' in assignments_df.columns:
+                for prop in obj.get_property_assignments():
+                    props.append(f"{prop.code} ({str(prop.dataType).lower()})")
             props_by_obj.append(props)
             
         # Determine the maximum length of the object properties

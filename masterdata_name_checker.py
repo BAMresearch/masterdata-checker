@@ -21,21 +21,20 @@ def name_checker(file_path):
         # Extract parts of the file name
         entity_type, entity_name, version, division, contact_person, extension = match.groups()
         print(entity_type, entity_name, version, division, contact_person, extension)
-        return "File name: OK!"
+        return ["File name: OK!", True]
     else:
         # Return specific errors and positions
         errors = []
         file_name = file_name.split(".xls")
         
         if len(file_name) < 2:
-            errors.append("Invalid file format. Only .xls and .xlsx accepted")
-            return errors
+            raise UserFailureException("Error: Invalid file type. The file should be an Excel file (.xls or .xlsx)")
         
         else:
             file_parts = file_name[0].split("_")
-            if len(file_parts) < 2:
+            if len(file_parts) < 5:
                 errors.append("Invalid name format. The name should contain different fields separated by underscores (_). Consult the wiki to see which ones.")
-                return errors
+                return ["\n".join(errors), False]
             creator = file_parts.pop(-1)
             section = file_parts.pop(-1)
             version = file_parts.pop(-1)
@@ -55,4 +54,7 @@ def name_checker(file_path):
             if not re.match(r"^[a-zA-Z0-9]+$", creator):
                 errors.append("Invalid contact person at position 5.")
             
-            return "\n".join(errors)
+            return ["\n".join(errors), False]
+        
+class UserFailureException(Exception):
+    pass

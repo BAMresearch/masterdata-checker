@@ -5,10 +5,8 @@ Created on Wed Dec 27 15:02:19 2023
 @author: cmadaria
 """
 import openpyxl
-from pybis_connection import connect
 from masterdata_content_checker import index_to_excel_column
 import re
-import pandas as pd
 
 
 # =============================================================================
@@ -48,20 +46,23 @@ def compare_objects(obj1, obj2):
     
 def get_df_value(df, prop, attr):
     column_name = 'propertyType'
-    value_to_find = prop
     
+    # Check if 'propertyType' column exists in the DataFrame
+    if column_name not in df.columns:
+        return None  # or handle this case appropriately
+
+    value_to_find = prop
+
     # Create a boolean mask for rows where the condition is met
     mask = df[column_name] == value_to_find
 
     # Use the boolean mask to filter the DataFrame
     filtered_df = df[mask]
 
-    column_to_access = attr
-    
-    # Using .at[] for a specific row
-    value = filtered_df.at[filtered_df.index[0], column_to_access]
-    
-    return value
+    if not filtered_df.empty:
+        return filtered_df[attr].iloc[0] if attr in filtered_df.columns else None
+    else:
+        return None
     
 
 
@@ -145,6 +146,10 @@ def check_entity_same_code(file_path, o, openbis_entity):
     for prop in openbis_entity.get_property_assignments():
         openbis_entity_properties.append(prop.permId)
             
+    # Remove None values from both lists before sorting
+    entity_properties = [prop for prop in entity_properties if prop is not None]
+    openbis_entity_properties = [prop for prop in openbis_entity_properties if prop is not None]
+
     #check if the properties lists are the same
     if sorted(entity_properties) != sorted(openbis_entity_properties):
         errors.append(f"The set of Property Types assigned to the ('{entity_type}') '{entity_code}' has been changed compared to the previous version.")
@@ -401,11 +406,11 @@ def check_prefix_sufix(file_path, o):
 
         if (len(difference) != 0) or (len(changes) != 0):
             errors.append(f"As a specification of the entity type {prefix}, the entity type {entity_code} must include all Property types of {prefix} without any changes.")
-            errors.append(f"The missing properties are: ")
+            errors.append("The missing properties are: ")
             missing = ", ".join(difference)
             errors.append(missing)
             errors.append("\n")
-            errors.append(f"The changed property attributes are: ")
+            errors.append("The changed property attributes are: ")
             changed = "\n".join(changes)
             errors.append(changed)
     
@@ -473,14 +478,14 @@ def check_prefix_prefix(o, prefix, entity_type, errors):
                         changes.append(f"Change in metadata of Property type {key}.")
 
         if (len(difference) != 0) or (len(changes) != 0):
-            errors.append(f"As a specification of the entity type {prefix}, the entity type {entity_code} must include all Property types of {prefix} without any changes.")
+            errors.append(f"As a specification of the entity type {prefix}, the entity type {suffix} must include all Property types of {prefix} without any changes.")
             missing = ", ".join(difference)
             if missing != "":
-                errors.append(f"The missing properties are: ")
+                errors.append("The missing properties are: ")
                 errors.append(missing)
             else:
-                errors.append(f"There are no missing properties")
-            errors.append(f"The changed property attributes are: ")
+                errors.append("There are no missing properties")
+            errors.append("The changed property attributes are: ")
             changed = "\n".join(changes)
             errors.append(changed)
 
@@ -489,8 +494,8 @@ def check_prefix_prefix(o, prefix, entity_type, errors):
         check_prefix_prefix(o, prefix_2, entity_type, errors)
         
         
-def entity_checker(file_path):
-    o = connect('serverA')
+def entity_checker(file_path, o):
+    
     errors = []
     
     workbook = openpyxl.load_workbook(file_path)

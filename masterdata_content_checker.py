@@ -122,13 +122,66 @@ def check_properties(sheet, errors):
                 column_below_section = []
                 for cell in sheet[term_letter][4:]:
                     if cell.value is not None:
-                        column_below_section.append(cell.value)
+                        column_below_section.append(cell.value) if '$' not in cell.value else column_below_section.append(cell.value.replace('$', ''))
                     else:
                         pass
-                invalid_section = [i + 5 for i, cell in enumerate(column_below_section) if not (re.match(r'.*', str(cell)) or "$" in str(cell))]
+                    
+                invalid_section = [i + 5 for i, cell in enumerate(column_below_section) if not (re.match(r'^[A-Z][A-Za-z]*(?:\s[A-Z][A-Za-z]*)*$', str(cell)) or "$" in str(cell))]
                 if invalid_section:
-                    errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_section))}. Specify the section as text format")
-
+                    errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_section))}. Each word in the Section should start with a capital letter.")
+            
+                # Group Check: Ensure all properties within the same section are grouped together
+                seen_sections = {}
+                non_contiguous_rows = []
+                
+                for i, current_value in enumerate(column_below_section):
+                    if current_value in seen_sections:
+                        # If the value has been seen before but the row is not contiguous, add an error
+                        if seen_sections[current_value] != i - 1:
+                            non_contiguous_rows.append(i + 5)
+                    seen_sections[current_value] = i  # Update the last seen row index for the current value
+                
+                if non_contiguous_rows:
+                    errors.append(f"Error: Non-contiguous rows found for the same 'Section' value at row(s): {', '.join(map(str, non_contiguous_rows))}. Ensure that all properties within the same Section are grouped together.")
+            
+                # Predefined section order (fixed order)
+                predefined_section_order = ["General Information", "Additional Information", "Comments"]
+            
+                # Validate contiguous groups and predefined section order
+                seen_sections = set()
+                previous_section_type = None
+                section_errors = []  # Store section-specific errors
+                additional_info_seen = False  # Flag to track if "Additional Information" has been seen
+                comments_seen = False  # Flag to track if "Comments" has been seen
+            
+                # Traverse the section list
+                for i, section in enumerate(column_below_section):
+                    if section in predefined_section_order:
+                        if section == "General Information":
+                            if previous_section_type not in [None, "General Information"]:
+                                section_errors.append(f"Error at row {i + 5}: 'General Information' should only appear at the beginning.")
+                        elif section == "Additional Information":
+                            if previous_section_type not in ["General Information", "user-defined"]:
+                                section_errors.append(f"Error at row {i + 5}: 'Additional Information' should appear after 'General Information' and any user-defined sections.")
+                            additional_info_seen = True  # Mark that "Additional Information" has been encountered
+                        elif section == "Comments":
+                            if previous_section_type not in ["General Information", "user-defined", "Additional Information"]:
+                                section_errors.append(f"Error at row {i + 5}: 'Comments' should appear after 'Additional Information'.")
+                            comments_seen = True  # Mark that "Comments" has been encountered
+                        previous_section_type = section
+                    else:
+                        # User-defined section
+                        if comments_seen:
+                            section_errors.append(f"Error at row {i + 5}: User-defined section '{section}' cannot appear after 'Comments'.")
+                        if additional_info_seen and not comments_seen:
+                            section_errors.append(f"Error at row {i + 5}: User-defined section '{section}' cannot appear after 'Additional Information' but before 'Comments'.")
+                        previous_section_type = "user-defined"
+            
+                # Output any errors
+                if section_errors:
+                    for error in section_errors:
+                        errors.append(error)
+            
             # Check the cell below "Property label"
              elif term == "Property label":
                 column_below_label = []
@@ -140,6 +193,20 @@ def check_properties(sheet, errors):
                 invalid_label = [i + 5 for i, cell in enumerate(column_below_label) if not (re.match(r'.*', str(cell)) or "$" in str(cell))]
                 if invalid_label:
                     errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_label))}. Specify the property label as text format")
+                    
+                # Dynamically find the "Section" column
+                if "Section" in row_headers:
+                    section_index = row_headers.index("Section") + 1
+                    section_letter = index_to_excel_column(section_index)
+                    column_below_section = [cell.value for cell in sheet[section_letter][4:]]
+
+                    # New check: "Notes" in "Property label" should correspond to "Additional Information" in "Section"
+                    for i, label_value in enumerate(column_below_label):
+                        if label_value == "Notes":
+                            section_value = column_below_section[i]
+                            if section_value != "Additional Information":
+                                errors.append(f"Error: 'Notes' found in the 'Property label' column at row {i + 5}, but corresponding 'Section' column does not contain 'Additional Information'. Value found: {section_value}")
+
 
             # Check the cell below "Data type"
              elif term == "Data type":
@@ -233,24 +300,28 @@ def check_vocab_terms(sheet, errors):
                 column_below_label = sheet[term_letter][4:]
                 invalid_label = [i + 5 for i, cell in enumerate(column_below_label) if cell.value and not re.match(r'.*', str(cell.value))]
                 if invalid_label:
-                    errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_section))}. Specify the label as text format")
+                    errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_label))}. Specify the label as text format")
             
     return "\n".join(errors)
 
 #file_path = 'C:/Users/cmadaria/Documents/Projects/Type checker/object_type_CHEMICAL_v1_S.3_relathma.xlsx'
-def content_checker(file_path):
+def content_checker(file_path, name_ok):
     workbook = openpyxl.load_workbook(file_path)
-    errors = []
-    file_name = file_path.split("/")[-1]
-    file_name = file_name.split(".xls")
-    file_parts = file_name[0].split("_")
-    file_parts.pop(-1)
-    file_parts.pop(-1)
-    version = file_parts.pop(-1)
-    etype = file_parts.pop(0)
-    if (etype == "object" or etype == "collection" or etype == "dataset"):
-        etype = etype + "_" + file_parts.pop(0)
-    code = "_".join(file_parts)
+    errors = []  
+    
+    if(name_ok):
+        file_name = file_path.split("/")[-1]
+        file_name = file_name.split(".xls")
+        file_parts = file_name[0].split("_")
+        file_parts.pop(-1)
+        file_parts.pop(-1)
+        version = file_parts.pop(-1)
+        etype = file_parts.pop(0)
+        if (etype == "object" or etype == "collection" or etype == "dataset"):
+            etype = etype + "_" + file_parts.pop(0)
+        code = "_".join(file_parts)
+    else:
+        version, etype, code = "", "", ""
 
     sheet = workbook.active
     
@@ -451,69 +522,147 @@ def content_checker(file_path):
                      if term == "Version":
                         column_below_version = sheet[term_index][2:]
                         # Check if any value in the column is not an integer
-                        non_integer_indices = [i + 3 for i, cell in enumerate(column_below_version) if not isinstance(cell.value, int)]
-                        if non_integer_indices:
+                        non_integer_cells = [(i + 3, cell.value) for i, cell in enumerate(column_below_version) if not isinstance(cell.value, int)]
+                        if non_integer_cells:
                             # Append an error indicating the positions (row numbers) that are not integers
-                            errors.append(f"Error: Values not valid found in the 'Version' column (they should be Integers) at row(s): {', '.join(map(str, non_integer_indices))}. Value found: {cell.value}")
+                            non_integer_indices = [str(row) for row, _ in non_integer_cells]
+                            invalid_values = [str(value) for _, value in non_integer_cells]
+                            errors.append(f"Error: Values not valid found in the 'Version' column (they should be Integers) at row(s): {', '.join(non_integer_indices)}. Value(s) found: {', '.join(invalid_values)}")
 
                     # Check the column below "Code"
                      elif term == "Code":
                         column_below_code = sheet[term_index][2:]
-                        invalid_codes = [i + 3 for i, cell in enumerate(column_below_code) if not re.match(r'^\$?[A-Z0-9_.]+$', str(cell.value))]
+                        invalid_codes = [(i + 3, cell.value) for i, cell in enumerate(column_below_code) if not re.match(r'^\$?[A-Z0-9_.]+$', str(cell.value))]
                         if invalid_codes:
-                            # Append an error indicating the positions (row numbers) with invalid values for the current term
-                            errors.append(f"Error: Invalid code found in the '{term}' column at row(s): {', '.join(map(str, invalid_codes))}. Value found: {cell.value}")
-                    
+                            invalid_rows = [str(row) for row, _ in invalid_codes]
+                            invalid_values = [str(value) for _, value in invalid_codes]
+                            errors.append(f"Error: Invalid code found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Value(s) found: {', '.join(invalid_values)}")
                     
                     # Check the cell below "Description"
                      elif term == "Description":
                         column_below_description = sheet[term_index][2:]
-                        invalid_indices = [i + 3 for i, cell in enumerate(column_below_code) if not re.match(r'.*//.*', str(cell.value))]
-                        if invalid_indices:
-                            errors.append(f"Error: Invalid value(s) found in the '{term}' column at row(s): {', '.join(map(str, invalid_indices))}. Description should follow the schema: English Description + '//' + German Description. Value found: {cell.value}")
-
+                        invalid_descriptions = [(i + 3, cell.value) for i, cell in enumerate(column_below_description) if not re.match(r'.*//.*', str(cell.value))]
+                        if invalid_descriptions:
+                            invalid_rows = [str(row) for row, _ in invalid_descriptions]
+                            invalid_values = [str(value) for _, value in invalid_descriptions]
+                            errors.append(f"Error: Invalid value(s) found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Description should follow the schema: English Description + '//' + German Description. Value(s) found: {', '.join(invalid_values)}")
+                    
                     # Check the cell below "Mandatory"
                      elif term == "Mandatory":
                         column_below_mandatory = sheet[term_index][2:]
-                        invalid_mandatory = [i + 3 for i, cell in enumerate(column_below_mandatory) if cell.value not in ["TRUE", "FALSE"]]
+                        invalid_mandatory = [(i + 3, cell.value) for i, cell in enumerate(column_below_mandatory) if cell.value not in ["TRUE", "FALSE"]]
                         if invalid_mandatory:
-                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_mandatory))}. Accepted values: TRUE, FALSE. Value found: {cell.value}")
-
+                            invalid_rows = [str(row) for row, _ in invalid_mandatory]
+                            invalid_values = [str(value) for _, value in invalid_mandatory]
+                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Accepted values: TRUE, FALSE. Value(s) found: {', '.join(invalid_values)}")
+                    
                     # Check the cell below "Show in edit views"
                      elif term == "Show in edit views":
                         column_below_show = sheet[term_index][2:]
-                        invalid_show = [i + 3 for i, cell in enumerate(column_below_show) if cell.value not in ["TRUE", "FALSE"]]
+                        invalid_show = [(i + 3, cell.value) for i, cell in enumerate(column_below_show) if cell.value not in ["TRUE", "FALSE"]]
                         if invalid_show:
-                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_show))}. Accepted values: TRUE, FALSE. Value found: {cell.value}")
-
-                    # Check the cell below "Section"
+                            invalid_rows = [str(row) for row, _ in invalid_show]
+                            invalid_values = [str(value) for _, value in invalid_show]
+                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Accepted values: TRUE, FALSE. Value(s) found: {', '.join(invalid_values)}")
+                    
                      elif term == "Section":
                         column_below_section = sheet[term_index][2:]
-                        invalid_section = [i + 3 for i, cell in enumerate(column_below_section) if not re.match(r'.*', str(cell.value))]
+                        print(column_below_section)
+                        invalid_section = [(i + 3, cell.value) for i, cell in enumerate(column_below_section) if not re.match(r'^[A-Z][a-z]*(?:\s[A-Z][a-z]*)*$', str(cell.value))]
                         if invalid_section:
-                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_section))}. Specify the section as text format. Value found: {cell.value}")
+                            invalid_rows = [str(row) for row, _ in invalid_section]
+                            invalid_values = [str(value) for _, value in invalid_section]
+                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Each word should start with a capital letter. Value(s) found: {', '.join(invalid_values)}")
+                    
+                        seen_sections = {}
+                        non_contiguous_rows = []
 
+                        for i, current_value in enumerate(column_below_section):
+                            if current_value in seen_sections:
+                                # If the value has been seen before but the row is not contiguous, add an error
+                                if seen_sections[current_value] != i - 1:
+                                    non_contiguous_rows.append(i + 5)
+                            seen_sections[current_value] = i  # Update the last seen row index for the current value
+
+                        if non_contiguous_rows:
+                            errors.append(f"Error: Non-contiguous rows found for the same 'Section' value at row(s): {', '.join(map(str, non_contiguous_rows))}. Ensure that all properties within the same Section are grouped together.")
+                            
+                        # Predefined section order (fixed order)
+                        predefined_section_order = ["General Information", "Additional Information", "Comments"]
+                    
+                        # Validate contiguous groups and predefined section order
+                        seen_sections = set()
+                        previous_section_type = None
+                        section_errors = []  # Store section-specific errors
+                        additional_info_seen = False  # Flag to track if "Additional Information" has been seen
+                        comments_seen = False  # Flag to track if "Comments" has been seen
+                    
+                        # Traverse the section list
+                        for i, section in enumerate(column_below_section):
+                            if section in predefined_section_order:
+                                if section == "General Information":
+                                    if previous_section_type not in [None, "General Information"]:
+                                        section_errors.append(f"Error at row {i + 5}: 'General Information' should only appear at the beginning.")
+                                elif section == "Additional Information":
+                                    if previous_section_type not in ["General Information", "user-defined"]:
+                                        section_errors.append(f"Error at row {i + 5}: 'Additional Information' should appear after 'General Information' and any user-defined sections.")
+                                    additional_info_seen = True  # Mark that "Additional Information" has been encountered
+                                elif section == "Comments":
+                                    if previous_section_type not in ["General Information", "user-defined", "Additional Information"]:
+                                        section_errors.append(f"Error at row {i + 5}: 'Comments' should appear after 'Additional Information'.")
+                                    comments_seen = True  # Mark that "Comments" has been encountered
+                                previous_section_type = section
+                            else:
+                                # User-defined section
+                                if comments_seen:
+                                    section_errors.append(f"Error at row {i + 5}: User-defined section '{section}' cannot appear after 'Comments'.")
+                                if additional_info_seen and not comments_seen:
+                                    section_errors.append(f"Error at row {i + 5}: User-defined section '{section}' cannot appear after 'Additional Information' but before 'Comments'.")
+                                previous_section_type = "user-defined"
+                    
+                        # Output any errors
+                        if section_errors:
+                            for error in section_errors:
+                                errors.append(error)
+            
                     # Check the cell below "Property label"
                      elif term == "Property label":
                         column_below_label = sheet[term_index][2:]
-                        invalid_label = [i + 3 for i, cell in enumerate(column_below_label) if not re.match(r'.*', str(cell.value))]
+                        invalid_label = [(i + 3, cell.value) for i, cell in enumerate(column_below_label) if not re.match(r'.*', str(cell.value))]
                         if invalid_label:
-                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_label))}. Specify the property label as text format. Value found: {cell.value}")
+                            invalid_rows = [str(row) for row, _ in invalid_label]
+                            invalid_values = [str(value) for _, value in invalid_label]
+                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Specify the property label as text format. Value(s) found: {', '.join(invalid_values)}")
+                         # Dynamically find the "Section" column
+                        if "Section" in second_row_values:
+                            section_column_index = second_row_values.index("Section") + 1  # Find the index of the "Section" column
+                            section_letter = index_to_excel_column(section_column_index)  # Convert index to Excel column letter
+                            column_below_section = sheet[section_letter][2:]  # Get all cells below the "Section" header
 
+                            # New check for "Notes" in "Property label" and "Additional Information" in "Section"
+                            for i, cell in enumerate(column_below_label):
+                                if cell.value == "Notes":
+                                    section_value = column_below_section[i].value  # Get the value in the "Section" column for the same row
+                                    if section_value != "Additional Information":
+                                        errors.append(f"Error: 'Notes' found in the 'Property label' column at row {i + 5}, but corresponding 'Section' column does not contain 'Additional Information'. Value found: {section_value}")
+                    
                     # Check the cell below "Data type"
                      elif term == "Data type":
                         column_below_type = sheet[term_index][2:]
-                        invalid_type = [i + 3 for i, cell in enumerate(column_below_type) if cell.value not in ["INTEGER", "REAL", "VARCHAR", "MULTILINE_VARCHAR", "HYPERLINK", "BOOLEAN", "CONTROLLEDVOCABULARY", "XML", "TIMESTAMP", "DATE", "SAMPLE"]]
+                        invalid_type = [(i + 3, cell.value) for i, cell in enumerate(column_below_type) if cell.value not in ["INTEGER", "REAL", "VARCHAR", "MULTILINE_VARCHAR", "HYPERLINK", "BOOLEAN", "CONTROLLEDVOCABULARY", "XML", "TIMESTAMP", "DATE", "SAMPLE"]]
                         if invalid_type:
-                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(map(str, invalid_type))}. Accepted types: INTEGER, REAL, VARCHAR, MULTILINE_VARCHAR, HYPERLINK, BOOLEAN, CONTROLLEDVOCABULARY, XML, TIMESTAMP, DATE, SAMPLE.  Value found: {cell.value}")
-
+                            invalid_rows = [str(row) for row, _ in invalid_type]
+                            invalid_values = [str(value) for _, value in invalid_type]
+                            errors.append(f"Error: Invalid value found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Accepted types: INTEGER, REAL, VARCHAR, MULTILINE_VARCHAR, HYPERLINK, BOOLEAN, CONTROLLEDVOCABULARY, XML, TIMESTAMP, DATE, SAMPLE. Value(s) found: {', '.join(invalid_values)}")
+                    
                     # Check the column below "Vocabulary code"
                      elif term == "Vocabulary code":
                         column_below_vocab = sheet[term_index][2:]
-                        invalid_vocab = [i + 3 for i, cell in enumerate(column_below_vocab) if cell.value is not None and not re.match(r'^\$?[A-Z0-9_.]+$', str(cell.value))]
+                        invalid_vocab = [(i + 3, cell.value) for i, cell in enumerate(column_below_vocab) if cell.value is not None and not re.match(r'^\$?[A-Z0-9_.]+$', str(cell.value))]
                         if invalid_vocab:
-                            # Append an error indicating the positions (row numbers) with invalid values for the current term
-                            errors.append(f"Error: Invalid vocabulary code found in the '{term}' column at row(s): {', '.join(map(str, invalid_vocab))}. Value found: {cell.value}")
+                            invalid_rows = [str(row) for row, _ in invalid_vocab]
+                            invalid_values = [str(value) for _, value in invalid_vocab]
+                            errors.append(f"Error: Invalid vocabulary code found in the '{term}' column at row(s): {', '.join(invalid_rows)}. Value(s) found: {', '.join(invalid_values)}")
 
 
     # Close the workbook after use
