@@ -1,0 +1,138 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+classifiers = [
+  "Natural Language :: English",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+name = "masterdata-checker"
+description = "A Python tool to check the correctness of a given Masterdata definitions file with respect to the entities already registered in the BAM Data Store."
+dynamic = ["version"]
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "Carlos Madariaga", email = "carlos.madariaga@bam.de" },
+  { name = "Jose M. Pizarro", email = "jose.pizarro-blanco@bam.de" },
+]
+maintainers = [
+  { name = "Carlos Madariaga", email = "carlos.madariaga@bam.de" },
+  { name = "Jose M. Pizarro", email = "jose.pizarro-blanco@bam.de" },
+]
+license = { file = "LICENSE" }
+dependencies = [
+  "pybis",
+  "pandas",
+  "openpyxl",
+  "click",
+]
+
+[project.urls]
+"Homepage" = "https://git.bam.de/bam-data-store/development/masterdata_checker"
+"Bug Tracker" = "https://git.bam.de/bam-data-store/development/masterdata_checker/issues"
+
+[project.optional-dependencies]
+dev = [
+  "mypy==1.0.1",
+  "ruff",
+  "pytest",
+  "pytest-timeout",
+  "pytest-cov",
+]
+jupy = [
+  "jupyterlab",
+  "notebook",
+  "ipywidgets",
+]
+docu = [
+  "mkdocs",
+  "mkdocs-material",
+  "pymdown-extensions",
+  "mkdocs-click",
+]
+
+[project.scripts]
+masterdata_checker = "masterdata_checker.cli:cli"
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+# Same as Black.
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle
+    "PL", # pylint
+    "F", # Pyflakes
+    "UP", # pyupgrade
+    "I", # isort
+]
+ignore = [
+    "F401", # Module imported but unused
+    "E501", # Line too long ({width} > {limit} characters)
+    "E701", # Multiple statements on one line (colon)
+    "E731", # Do not assign a lambda expression, use a def
+    "E402",  # Module level import not at top of file
+    "PLR0911", # Too many return statements
+    "PLR0912", # Too many branches
+    "PLR0913", # Too many arguments in function definition
+    "PLR0915", # Too many statements
+    "PLR2004", # Magic value used instead of constant
+    "PLW0603", # Using the global statement
+    "PLW2901", # redefined-loop-name
+    "PLR1714", # consider-using-in
+    "PLR5501", # else-if-used
+]
+fixable = ["ALL"]
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+# this is entirely optional, you can remove this if you wish to
+[tool.ruff.format]
+# use single quotes for strings.
+quote-style = "single"
+# indent with spaces, rather than tabs.
+indent-style = "space"
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+write_to = "src/masterdata_checker/_version.py"

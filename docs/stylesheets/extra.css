@@ -1,0 +1,32 @@
+@font-face {
+    font-family: "BAM Klavika-Light";
+    src: url("../assets/fonts/BAM_Klavika-Light.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "BAM Klavika-LightItalic";
+    src: url("../assets/fonts/BAM_Klavika-LightItalic.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "BAM Klavika-Medium";
+    src: url("../assets/fonts/BAM_Klavika-Medium.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "BAM Klavika-MediumItalic";
+    src: url("../assets/fonts/BAM_Klavika-MediumItalic.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --md-text-font: "BAM Klavika-Light";
+    --md-code-font: "Noto Mono";
+}

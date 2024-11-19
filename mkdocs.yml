@@ -1,0 +1,52 @@
+site_name: Masterdata Checker Documentation
+site_description: Documentation for the Masterdata Checker tool.
+site_author: BAM Data Store
+repo_url: https://git.bam.de/bam-data-store/development/masterdata_checker
+theme:
+  name: material
+  palette:
+    # primary: "#00aff0"
+    # accent: "#d2001e"
+    - scheme: default
+    # - media: "(prefers-color-scheme: light)"
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+    - scheme: slate
+    # - media: "(prefers-color-scheme: dark)"
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+  logo: assets/datastore-logo.png
+  favicon: assets/datastore-logo.png
+  features:
+    - navigation.path
+    - navigation.footer
+    - navigation.top
+    - content.code.copy
+  # font:
+  #   text: "Titillium Web"
+  # font: false
+plugins:
+  - search
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - admonition
+  - footnotes
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - toc:
+      permalink: True
+      toc_depth: 3
+  - pymdownx.arithmatex:
+      generic: true
+# extra_css:
+#   - stylesheets/extra.css
+#   - https://fonts.cdnfonts.com/css/noto-mono
