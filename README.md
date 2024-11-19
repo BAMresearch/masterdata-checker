@@ -1,129 +1,152 @@
-# Masterdata Checker & Visualizer
+# BAM Data Store: MasterDataChecker
 
-Check the correctness and alignment with the BAM Data Store Project guidelines of the new entities before registering them in openBIS, through the Import utility using Excel files containing the new Objects data. 
+The `masterdata_checker` is a Python package used to check the correctness of a given Masterdata definitions file with respect to the entities already registered in the BAM Data Store. The package provides a Graphical User Interface (GUI) on which the user can:
+- Choose a local Masterdata file to be checked.
+- Revise the errors logs to correct mistakes in the original Masterdata file.
+- Depending on the credentials access, select a specific BAM Data Store instance and the Masterdata definitions therein.
 
-With a clear and easy interface, and a detailed list of every present issue in the Excel files, it allows you to correct your new objects and to avoid losing time.
-
-It is also possible to visualize the whole content of the desired openBIS instances, as long as we have credentials to access them, to check the metadata already present on the selected instance.
-
-There is also available a Jupyter Notebook version to execute the Masterdata Checker and Visualizer directly in the Web IDE.
-
-
-## Requirements
-- ([Python3](https://www.python.org/downloads/))
-
-Once that you have installed latest Python version, you can use the ``pip`` command to install the following dependencies (both in your command line (cmd) or directly in a Jupyter Notebook):
-- pyBIS: ``pip install pybis``
-- pandas: ``pip install pandas``
-- regex: ``pip install re``
-
-Those are the basic packages that you will need.
-
-Now, depending on the version that you are going to use, you need to install the following packages (although probably most of them will be already installed within your Python installation, but just in case that you receive any error with some of the packages, here you have the way of installing them):
-
-*For the Web IDE version (Jupyer Notebook)*:
-- ``pip install jupyterlab`` // ``pip install notebook`` (choose one, information about [here](https://jupyter.org/install))
-- CSV: ``pip install csv``
-- OS: ``pip install os``
-- Python Widgets: ``pip install ipywidgets``
-- Time: ``pip install time``
-- Tempfile: ``pip install tempfile``
-
-*For the local UI (User Interface)*:
-- TKInter: ``pip install tkinter``
-- OpenPyXL: ``pip install openpyxl``
+We also provide a Jupyter Notebook as a tutorial to execute the API of `masterdata_checker`.
 
 
-## Installation
-Once that you have fulfilled all the requirements above, no more installation is needed, you can just run the main script to start using it:
+<!--
+## Getting started
 
-First, clone or download the repository code (and unzip it in case is compressed).
-Then, go to the main project folder an do the following:
+ Add here installation instructions once the package is deployed -->
 
-From command line:
-- ``python masterdata_checker.py``
+## Development
 
-From Jupyter Notebooks:
-- ``jupyter-notebook`` (on the command line)
-- Open the file *jupyter_checker/checker_jupyter.ipynb*
+If you want to develop locally this package, clone the project and enter in the workspace folder:
+```sh
+git clone https://git.bam.de/bam-data-store/development/masterdata_checker.git
+cd masterdata_checker
+```
 
+Note you need to have installed the Python interface for the Tcl/Tk GUI toolkit ([`tkinter`](https://docs.python.org/3/library/tkinter.html)). If you don't have it, you can run:
+```sh
+sudo apt-get install python3-tk
+```
 
+#### Option 1: Virtual environment with `venv`
 
-## Usage
+Create a virtual environment (you can use Python>3.9) in your workspace:
+```sh
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-### Local Application: Checking a file
+Make sure `pip` is upgraded:
+```sh
+pip install --upgrade pip
+```
 
-1- Inside the main project folder, run the following in the command line (cmd): ``python masterdata_checker.py "username" "instancename"``, where you will need to replace "username" by your username in openBIS (for example, johndoe), and "instancename" by the name o the intance where you want to work with (for example, main).
+Install the package with the desired optional dependencies (specified in between brackets, e.g., `[dev]` or `[jupy]`) and in editable mode (with the added `-e` flag):
+```sh
+pip install -e '.[dev,jupy,docu]'
+```
 
-![run1](./images/Screenshot_2024-08-29_125543.png)
+#### Option 2: `uv` virtual environment
 
-2- A prompt will appear asking for your password for the introduced username in the indicated instance. The password will not appear meanwhile you write it, to keep it private, but as soon as you are finish, click Enter, and if al the data is correct, the GUI will follow.
+We recommend using `uv` for fast pip installation of the package. In this case, you can instead create a virtual environment by doing:
+```sh
+uv venv
+source .venv/bin/activate
+```
 
-![run2](./images/Screenshot_2024-08-29_125631.png)
+Install the package with the desired optional dependencies (specified in between brackets, e.g., `[dev]` or `[jupy]`) and in editable mode (with the added `-e` flag):
+```sh
+uv pip install -e '.[dev,jupy,docu]'
+```
 
-3- This interface will appear, click on "Select File...".
+### Run the tests
 
-![checker1](./images/Screenshot_2024-08-26_110931.png)
+You can locally run the tests by doing:
+```sh
+python -m pytest -sv tests
+```
 
-4- A File Explorer window will appear, select the desired file and click on "Open".
+where the `-s` and `-v` options toggle the output verbosity.
 
-![checker4](./images/Screenshot_2024-08-26_135001.png)
+You can also generate a local coverage report:
+```sh
+python -m pytest --cov=src tests
+```
 
-5- Now, click on "Check File!", and wait a few seconds, until a text field with all the instance information appear.
+### Run auto-formatting and linting
 
-![checker2](./images/Screenshot_2024-08-26_111456.png)
+We use [Ruff](https://docs.astral.sh/ruff/) for formatting and linting the code following the rules specified in the `pyproject.toml`. You can run locally:
+```sh
+ruff check .
+```
 
-### Local Application: Visualizing instance content
+This will produce an output with the specific issues found. In order to auto-fix them, run:
+```sh
+ruff format . --check
+```
 
-1- Inside the main project folder, run the following in the command line (cmd): ``python masterdata_checker.py "username" "instancename"``, where you will need to replace "username" by your username in openBIS (for example, johndoe), and "instancename" by the name o the intance where you want to work with (for example, main).
+If some issues are not possible to fix automatically, you will need to visit the file and fix them by hand.
 
-![run1](./images/Screenshot_2024-08-29_125543.png)
+<!-- ### Debugging
 
-2- A prompt will appear asking for your password for the introduced username in the indicated instance. The password will not appear meanwhile you write it, to keep it private, but as soon as you are finish, click Enter, and if al the data is correct, the GUI will follow.
+For interactive debugging of the tests, use `pytest` with the `--pdb` flag. We recommend using an IDE for debugging, e.g., _VSCode_. If that is the case, add the following snippet to your `.vscode/launch.json`:
+```json
+{
+  "configurations": [
+      {
+        "name": "<descriptive tag>",
+        "type": "debugpy",
+        "request": "launch",
+        "cwd": "${workspaceFolder}",
+        "program": "${workspaceFolder}/.pyenv/bin/pytest",
+        "justMyCode": true,
+        "env": {
+            "_PYTEST_RAISE": "1"
+        },
+        "args": [
+            "-sv",
+            "--pdb",
+            "<path-to-plugin-tests>",
+        ]
+    }
+  ]
+}
+```
 
-![run2](./images/Screenshot_2024-08-29_125631.png)
+where `<path-to-plugin-tests>` must be changed to the local path to the test module to be debugged.
 
-3- This interface will appear, click on ""Check Instance Content".
+The settings configuration file `.vscode/settings.json` automatically applies the linting and formatting upon saving the modified file. -->
 
-![checker1](./images/Screenshot_2024-08-26_110931.png)
+### Documentation on Github pages
 
-4- Now wait a few seconds, until a message indicating that a CSV file was created. This file will be located in the same location where you are executing the script, with name of the instance, an underscore "_", and the day of execution. It will contain all the instance Masterdata information (types for every entity, object properties by type, ...) 
+To view the documentation locally, install the extra packages using:
+```sh
+uv pip install -e '[docu]'
+```
 
-![checker3](./images/Screenshot_2024-08-26_111600.png)
+The first time, build the server:
+```sh
+mkdocs build
+```
 
-### Jupyter Notebook Web IDE
+Run the documentation server:
+```sh
+mkdocs serve
+```
 
-1- Run ``jupyter-lab`` or ``jupyter-notebook`` on the folder where the jupyter_checker is located, using the command line (depending on what you have installed).
+The output looks like:
+```sh
+INFO    -  Building documentation...
+INFO    -  Cleaning site directory
+INFO    -  [14:07:47] Watching paths for changes: 'docs', 'mkdocs.yml'
+INFO    -  [14:07:47] Serving on http://127.0.0.1:8000/
+```
 
-2- On the left side, select the file *checker_jupyter.ipynb*, and double click to open it.
+Simply click on `http://127.0.0.1:8000/`. The changes in the `md` files of the documentation are inmediately reflected when the files are saved (the local web will automatically refresh).
 
-3- Once the notebook is open, execute the first code cells: the one containing all the imports, and then the cell for selecting the openBIS instance. A dropdown list will appear containing all the available openBIS instances; select the desired one.
+## Main contributors
 
-![jup1](./images/Screenshot_2024-08-26_111746.png)
-
-4- Then, run the cell for entering username and password. Two text fields for entering this information and a button called "Login" should appear. Enter your information and click on it. If everything went well, you will see "Login sucessful!".
-
-![jup2](./images/Screenshot_2024-08-26_111801.png)
-
-***NOTE***: You will see another cell below the login tool, execute it just if the login fails for any reason using the login tool. It will take the username and password entered in the login tool, and do the login manually by script instead of using the button (that sometimes can fail).
-
-5- Now you will see the "FUNCTIONS" section. Here, you should execute all the cells that you can see (the cells will be collapsed, but you can extend them if you want just clicking on them), because there are the functions for the checker and visualizer. Run all the cell codes until you get to the section "USE THE CHECKER".
-
-![jup3](./images/Screenshot_2024-08-28_105511.png)
-
-6- (Just follow this step and the next one in case that you want to use the Masterdata Checker. In case that you want to execute the Visualizer, go directly to step 8). Execute the cell that goes after "UPLOAD THE EXCEL FILE". An *Upload* button will appear. Click on it, and upload the Excel file with the entity where you want to check the Masterdata.
-
-![jup4](./images/Screenshot_2024-08-28_110021.png)
-
-7- Finally, using the next cell will run the checker. A loading bar will appear with the different procesess, and once that it finishes, all the checks will appear below.
-
-![jup5](./images/Screenshot_2024-08-28_110636.png)
-
-8- For running the Visualizer, steps 6 and 7 are not needed. Just run the cell below the section "USE THE VISUALIZER", and you will see a loading bar. When it finishes, you will see the instance content (in Masterdata terms), and together with it, a CSV file will be generated in the same location of the notebook, in a folder determined by the instance, named with instace and generation date. Example directory and file name: *devel_data/devel_28082024*.
-
-![jup5](./images/Screenshot_2024-08-28_110709.png)
-
-## Support
-Carlos Madariaga: carlos.madariaga@bam.de
-Jörg Radler: joerg.raedler@bam.de
-Angela Ariza: angela.ariza@bam.de
+| Name | E-mail     | Role |
+|------|------------|--------|-----------------|
+| Carlos Madariaga | [carlos.madariaga@bam.de](carlos.madariaga@bam.de) | Admin |
+| Dr. Jose M. Pizarro | [jose.pizarro-blanco@bam.de](jose.pizarro-blanco@bam.de) | Maintainer |
+| Jörg Rädler | [joerg.raedler@bam.de](joerg.raedler@bam.de) | Maintainer |
+| Dr. Angela Ariza | [angela.ariza@bam.de](angela.ariza@bam.de) | Maintainer |
