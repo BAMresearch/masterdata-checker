@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - deploy
 
 .base_ruff:
   stage: build
