@@ -3,13 +3,16 @@ import pytest
 from masterdata_checker.name import UserFailureException, name_checker
 
 # @pytest.mark.parametrize(
-#     'file_path, result',
+#     'file_path, expected_output',
 #     [
 #         ('whatever-filepath', ['whatever-result-we-expert', True]),
 #         ('another-filepath', ['another-result-we-expert', False]),
-#     ]
+#     ],
 # )
-# def test_name_checker(filepath: str, result: list[str, bool]):
+
+## Para hacerlo en bucle
+# def test_name_checker(file_path: str, expected_output: list[str, bool]):
+#    assert name_checker(file_path) == expected_output
 
 
 def test_valid_file_name():
