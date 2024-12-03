@@ -29,7 +29,7 @@
           "type": "debugpy",
           "request": "launch",
           "console": "integratedTerminal",
-          "program": "${workspaceFolder}/src/masterdata_checker/app.py",  // path to your entry point Python module
+          "program": "${workspaceFolder}/src/masterdata_checker/app.py",
       },
       {
           "name": "masterdata-checker tests",
