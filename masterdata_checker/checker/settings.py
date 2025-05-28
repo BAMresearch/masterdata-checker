@@ -185,7 +185,7 @@ LOGGING = {
             "level": "WARNING",  # Only log WARNING and above for Django
             "propagate": True,
         },
-        "myapp": {  # Replace 'myapp' with your actual app name
+        "app": {  # Replace 'myapp' with your actual app name
             "handlers": ["console", "file"],
             "level": "DEBUG",  # Log your app's debug/info messages
             "propagate": False,

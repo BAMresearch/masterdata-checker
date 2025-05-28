@@ -1,3 +1,4 @@
+import logging
 import uuid
 
 from django.conf import settings
@@ -9,12 +10,16 @@ from pybis import Openbis
 
 from app.utils import encrypt_password, get_openbis_from_cache
 
+logger = logging.getLogger("app")
+
 
 def homepage(request):
     # Check if the user is logged in
     o = get_openbis_from_cache(request)
     if not o:
+        logger.info("User not logged in, redirecting to login page.")
         return redirect("login")
+    logger.debug("User is logged in, proceeding to homepage.")
 
     context = {}
     return render(request, "homepage.html", context)
@@ -42,7 +47,8 @@ def login(request):
 
             return redirect("homepage")
 
-        except Exception:
+        except Exception as e:
+            logger.error(f"Login failed for user '{username}': {e}", exc_info=True)
             error = "Invalid username or password."
 
     return render(request, "login.html", {"error": error})

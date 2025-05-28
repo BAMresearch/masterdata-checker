@@ -46,16 +46,6 @@
             <div class="col-md-8">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <!-- Add Tabs for Checker and Visualizer -->
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="checker-tab" data-bs-toggle="tab" data-bs-target="#checker-content" type="button" role="tab" aria-controls="checker-content" aria-selected="true">Masterdata Checker</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="visualizer-tab" data-bs-toggle="tab" data-bs-target="#visualizer-content" type="button" role="tab" aria-controls="visualizer-content" aria-selected="false">Masterdata Visualizer</button>
-                            </li>
-                        </ul>
-
                         <div class="tab-content mt-3" id="myTabContent">
                             <!-- Masterdata Checker Content -->
                             <div class="tab-pane fade show active" id="checker-content" role="tabpanel" aria-labelledby="checker-tab">
@@ -111,30 +101,6 @@
                                         {{ error|linebreaks|safe }}
                                     </div>
                                 {% endif %}
-                            </div>
-
-                            <!-- Masterdata Visualizer Content -->
-                            <div class="tab-pane fade" id="visualizer-content" role="tabpanel" aria-labelledby="visualizer-tab">
-                                <h5 class="text-center">Masterdata Visualizer</h5>
-                                <form id="visualizer-form">
-                                    <div class="d-flex justify-content-between">
-                                        <!-- Progress bar, hidden by default -->
-                                        <div id="progress-container" class="progress flex-grow-1 mx-3" style="display: none; height: 25px;">
-                                            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Loading...</div>
-                                        </div>
-
-                                        <a id="downloadBtn" class="btn btn-secondary" href="#" style="display: none;" disabled>Download CSV</a>
-                                    </div>
-                                </form>
-
-                                <!-- Placeholder for instance information card -->
-                                <div id="instance-info" class="mt-3" style="display: none;">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div id="instanceDetails" class="card-text"></div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                         </div>
