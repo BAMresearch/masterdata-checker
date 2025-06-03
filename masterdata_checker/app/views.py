@@ -59,7 +59,20 @@ def homepage(request):
                     "level": "info",
                 }
             )
-            context["logs"] = log_storage
+
+            # Clean up for template rendering
+            context_logs = []
+            for log in log_storage:
+                context_log = {}
+                for k, v in log.items():
+                    if k in ["event", "timestamp", "level"]:
+                        # bootstrap has a danger level instead of error
+                        if k == "level" and v == "error":
+                            v = "danger"
+                        context_log[k] = v
+                context_logs.append(context_log)
+            # And store them in the context
+            context["logs"] = context_logs
         except Exception as e:
             logger.exception("Error during checker execution")
             # Store raised errors in context for rendering

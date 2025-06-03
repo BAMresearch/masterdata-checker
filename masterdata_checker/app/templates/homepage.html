@@ -66,35 +66,21 @@
                                         <strong>{{ code }}</strong>
                                     </div>
                                 {% endif %}
-                                {% if result %}
-                                <ul class="nav nav-tabs mt-4" id="dynamicTabs" role="tablist">
-                                    {% for tab_name in result.keys %}
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link {% if forloop.first %}active{% endif %}"
-                                                id="{{ tab_name }}-tab"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#{{ tab_name }}-pane"
-                                                type="button" role="tab">
-                                        {{ tab_name|title }}
-                                        </button>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
+                                {% if logs %}
+                                <div class="mt-4">
+                                    <h5>Checker Logs</h5>
+                                    <ul class="list-group">
+                                        {% for log in logs %}
+                                            <li class="list-group-item list-group-item-{{ log.level|default:"info" }}">
+                                                <div><strong>[{{ log.level|upper }}]</strong> {{ log.timestamp }}</div>
+                                                <div>{{ log.event|linebreaksbr }}</div>
 
-                                <div class="tab-content mt-3" id="dynamicTabsContent">
-                                    {% for tab_name, messages in result.items %}
-                                    <div class="tab-pane fade {% if forloop.first %}show active{% endif %}"
-                                        id="{{ tab_name }}-pane" role="tabpanel">
-                                        <h5>{{ tab_name|title }}</h5>
-                                        <ul class="list-group">
-                                        {% for message in messages %}
-                                            <li class="list-group-item">{{ message|safe|linebreaks }}</li>
-                                        {% empty %}
-                                            <li class="list-group-item text-success">No issues found.</li>
+                                                {% for key, value in log.items %}
+                                                    <div><strong>{{ key|title }}:</strong> {{ value }}</div>
+                                                {% endfor %}
+                                            </li>
                                         {% endfor %}
-                                        </ul>
-                                    </div>
-                                    {% endfor %}
+                                    </ul>
                                 </div>
                                 {% elif error %}
                                     <div class="alert alert-danger mt-3" role="alert">
@@ -102,7 +88,6 @@
                                     </div>
                                 {% endif %}
                             </div>
-
                         </div>
                     </div>
                 </div>
