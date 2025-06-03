@@ -168,5 +168,3 @@ cython_debug/
 
 # Ruff
 .ruff_cache
-
-django_checker
