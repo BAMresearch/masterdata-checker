@@ -1,6 +1,11 @@
+import datetime
 import logging
+import sys
+import tempfile
 import uuid
 
+from bam_masterdata.cli.cli import run_checker
+from bam_masterdata.logger import log_storage
 from django.conf import settings
 from django.contrib.auth import logout
 from django.core.cache import cache
@@ -8,7 +13,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from pybis import Openbis
 
-from app.utils import encrypt_password, get_openbis_from_cache
+from masterdata_checker.app.utils import encrypt_password, get_openbis_from_cache
 
 logger = logging.getLogger("app")
 
@@ -19,9 +24,47 @@ def homepage(request):
     if not o:
         logger.info("User not logged in, redirecting to login page.")
         return redirect("login")
-    logger.debug("User is logged in, proceeding to homepage.")
 
     context = {}
+
+    if request.method == "POST" and "upload" in request.POST:
+        uploaded_file = request.FILES.get("file")
+        if not uploaded_file:
+            context["error"] = "No file uploaded."
+            return render(request, "homepage.html", context)
+        if not uploaded_file.name.endswith((".xls", ".xlsx")):
+            context["error"] = (
+                "Invalid file type. Only .xls and .xlsx files are allowed."
+            )
+            return render(request, "homepage.html", context)
+
+        try:
+            # Clear previous logs
+            log_storage.clear()
+
+            # Save file to a temporary location
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as tmp:
+                for chunk in uploaded_file.chunks():
+                    tmp.write(chunk)
+                tmp_path = tmp.name
+
+            # Run checker (with `incoming` mode)
+            run_checker(file_path=tmp_path, mode="incoming")
+
+            # Store logs in context for rendering
+            log_storage.append(
+                {
+                    "event": f"Checked: {uploaded_file.name}",
+                    "timestamp": datetime.datetime.now().isoformat(),
+                    "level": "info",
+                }
+            )
+            context["logs"] = log_storage
+        except Exception as e:
+            logger.exception("Error during checker execution")
+            # Store raised errors in context for rendering
+            context["error"] = str(e)
+
     return render(request, "homepage.html", context)
 
 
