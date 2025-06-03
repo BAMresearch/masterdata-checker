@@ -116,7 +116,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Settings for session cookies
-SESSION_COOKIE_SECURE = False  # Ensures cookies are only sent over HTTPS
+# Ensures cookies are only sent over HTTPS (False while debugging, True in production)
+SESSION_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_HTTPONLY = True  # Prevents JavaScript access to cookies (XSS protection)
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire sessions when browser closes
 
@@ -126,7 +127,8 @@ SESSION_COOKIE_DOMAIN = None  # Important
 # Set session timeout
 SESSION_COOKIE_AGE = 3600  # Session expires after 1 hour (3600 seconds)
 
-CSRF_COOKIE_SECURE = False
+# Set to True in production to ensure CSRF cookies are only sent over HTTPS
+CSRF_COOKIE_SECURE = True
 
 
 # Internationalization
@@ -144,8 +146,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "myapp/static/"
-STATICFILES_DIRS = [BASE_DIR / "myapp/static"]
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "app/static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

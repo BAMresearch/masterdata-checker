@@ -1,5 +1,6 @@
 import uuid
 
+from bam_masterdata.logger import logger
 from cryptography.fernet import Fernet, InvalidToken
 from django.conf import settings
 from django.core.cache import cache
@@ -21,10 +22,10 @@ def decrypt_password(encrypted_password):
         decrypted_password = cipher_suite.decrypt(encrypted_password.encode("utf-8"))
         return decrypted_password.decode("utf-8")
     except InvalidToken as e:
-        print(f"Decryption failed: {str(e)}")
+        logger.error(f"Decryption failed: {str(e)}")
         raise InvalidToken("Decryption failed due to an invalid token.")
     except Exception as e:
-        print(f"Decryption error: {str(e)}")
+        logger.error(f"Decryption error: {str(e)}")
         raise e
 
 

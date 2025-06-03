@@ -1,21 +1,17 @@
 import datetime
 import logging
-import sys
 import tempfile
 import uuid
 
 from bam_masterdata.cli.cli import run_checker
-from bam_masterdata.logger import log_storage
+from bam_masterdata.logger import log_storage, logger
 from django.conf import settings
 from django.contrib.auth import logout
 from django.core.cache import cache
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from pybis import Openbis
 
 from masterdata_checker.app.utils import encrypt_password, get_openbis_from_cache
-
-logger = logging.getLogger("app")
 
 
 def homepage(request):
@@ -29,6 +25,7 @@ def homepage(request):
 
     if request.method == "POST" and "upload" in request.POST:
         uploaded_file = request.FILES.get("file")
+        context["file"] = uploaded_file.name
         if not uploaded_file:
             context["error"] = "No file uploaded."
             return render(request, "homepage.html", context)
@@ -69,6 +66,8 @@ def homepage(request):
                         # bootstrap has a danger level instead of error
                         if k == "level" and v == "error":
                             v = "danger"
+                        elif k == "level" and v == "debug":
+                            continue  # Skip debug logs in the UI
                         context_log[k] = v
                 context_logs.append(context_log)
             # And store them in the context
