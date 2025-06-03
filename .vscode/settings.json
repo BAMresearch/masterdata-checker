@@ -1,5 +1,5 @@
 {
-  "python.defaultInterpreterPath": ".pyenv/bin/python",
+  "python.defaultInterpreterPath": ".venv/bin/python",
   "python.terminal.activateEnvInCurrentTerminal": true,
   "editor.rulers": [90],
   "editor.renderWhitespace": "all",
@@ -9,7 +9,7 @@
   },
   "files.trimTrailingWhitespace": true,
   "files.watcherExclude": {
-      "${workspaceFolder}/.pyenv/**": true
+      "${workspaceFolder}/.venv/**": true
   },
   "files.exclude": {
       "\"**/*.pyc\": {\"when\": \"$(basename).py\"}": true,
@@ -21,31 +21,8 @@
   "python.testing.unittestEnabled": false,
   "editor.defaultFormatter": "charliermarsh.ruff",
   "editor.formatOnSave": true,
-  "launch": {
-    "version": "0.2.0",
-    "configurations": [
-      {
-          "name": "masterdata-checker Python",
-          "type": "debugpy",
-          "request": "launch",
-          "console": "integratedTerminal",
-          "program": "${workspaceFolder}/src/masterdata_checker/app.py",
-      },
-      {
-          "name": "masterdata-checker tests",
-          "type": "debugpy",
-          "request": "launch",
-          "console": "integratedTerminal",
-          "program": "${workspaceFolder}/.venv/bin/pytest",  // path to your virtual environment
-          "justMyCode": false,
-          "env": {
-          "_PYTEST_RAISE": "1"
-          },
-          "args": [
-              "-sv",
-              "${workspaceFolder}/tests/"  // path to your testing module
-          ]
-      },
-    ]
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.ruff": "always",
+    "source.fixAll.ruff": "always",
   },
 }
