@@ -60,14 +60,16 @@ def homepage(request):
             # Clean up for template rendering
             context_logs = []
             for log in log_storage:
+                # Skip debug logs in the UI
+                if log.get("level") == "debug":
+                    continue
+
                 context_log = {}
                 for k, v in log.items():
                     if k in ["event", "timestamp", "level"]:
                         # bootstrap has a danger level instead of error
                         if k == "level" and v == "error":
                             v = "danger"
-                        elif k == "level" and v == "debug":
-                            continue  # Skip debug logs in the UI
                         context_log[k] = v
                 context_logs.append(context_log)
             # And store them in the context
