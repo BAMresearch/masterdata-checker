@@ -1,9 +1,86 @@
+@font-face {
+    font-family: "BAM Klavika-Light";
+    src: url("../assets/fonts/BAMKlavika-Light.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "BAM Klavika-LightItalic";
+    src: url("../assets/fonts/BAMKlavika-LightItalic.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "BAM Klavika-Medium";
+    src: url("../assets/fonts/BAMKlavika-Medium.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "BAM Klavika-MediumItalic";
+    src: url("../assets/fonts/BAMKlavika-MediumItalic.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --text-font: "BAM Klavika-Light";
+    --titles-font: "BAM Klavika-Medium";
+    --code-font: "Noto Mono";
+
+    /* BAM colors */
+    --bam-weiss: rgb(243, 243, 243);
+    --bam-weiss-dark: rgb(238, 241, 243);
+    --bam-schwarz-100: rgb(0, 40, 50);
+    --bam-schwarz-80: rgb(50, 84, 99);
+    --bam-schwarz-60: rgb(95, 123, 137);
+    --bam-schwarz-45: rgb(125, 149, 163);
+    --bam-schwarz-30: rgb(163, 184, 195);
+    --bam-schwarz-15: rgb(204, 216, 223);
+    --bam-rot: rgb(210, 0, 30);
+    --bam-rot-dark: rgb(180, 15, 30);
+    --bam-rot-darker: rgb(140, 20, 25);
+    --bam-rot-darkest: rgb(80, 25, 25);
+    --bam-blau: rgb(0, 175, 240);
+    --bam-blau-dark: rgb(0, 137, 186);
+    --bam-blau-darker: rgb(0, 117, 153);
+    --bam-blau-darkest: rgb(0, 85, 110);
+    --bam-grun: rgb(140, 180, 15);
+    --bam-grun-dark: rgb(130, 165, 50);
+    --bam-grun-darker: rgb(90, 140, 50);
+    --bam-grun-darkest: rgb(55, 120, 50);
+    --bam-gelb: rgb(255, 220, 0);
+    --bam-gelb-dark: rgb(250, 185, 0);
+    --bam-gelb-darker: rgb(230, 155, 0);
+    --bam-gelb-darkest: rgb(205, 125, 0);
+
+    /* Backgrounds, primaries, and secondaries */
+    --background-light: var(--bam-weiss);
+    --color-light: var(--bam-schwarz-100);
+    --background-dark: var(--bam-schwarz-100);
+    --color-dark: var(--bam-weiss);
+
+    --code-color-light: var(--bam-grun-darkest);
+    --code-background-light: rgba(204, 216, 223, 0.3);  /* similar to bam-schwarz-15 */
+    --code-color-dark: var(--bam-grun);
+    --code-background-dark: rgba(27, 72, 83, 0.3);
+
+    --grid-background-light: rgba(238, 229, 174, 0.5);
+}
+
 /* General body styling */
 body {
     background-color: #f9f9f9; /* Very light background to make the card stand out */
-    font-family: 'Arial', sans-serif;
+    font-family: var(--text-font), sans-serif;
     padding: 20px; /* Adding some padding for better spacing */
 }
+
+/* .col-md-8 {
+    width: 100%;
+} */
 
 /* Card Styling */
 .card {
@@ -17,17 +94,19 @@ body {
 
 /* Card title styling */
 .card-title {
-    font-weight: 600;
-    font-size: 1.5rem;
     margin-bottom: 20px;
     color: #2d572c; /* Slightly darker green */
     text-align: center;
 }
 
+.card-title, h1, h2, h3, h4, h5, h6 {
+    font-family: var(--titles-font), sans-serif;
+}
+
 /* Button Styling */
 .btn-primary {
-    background-color: #4CAF50; /* Primary button color */
-    border-color: #45a049;
+    background-color: var(--bam-blau-dark); /* Primary button color */
+    border-color: var(--bam-blau-darkest);
     transition: all 0.3s ease;
     color: #fff;
     padding: 10px 20px; /* More padding for bigger, modern buttons */
@@ -37,8 +116,25 @@ body {
 }
 
 .btn-primary:hover {
-    background-color: #3e8e41; /* Darker green on hover */
-    border-color: #367c3a;
+    background-color: var(--bam-blau-darkest); /* Darker green on hover */
+    border-color: var(--bam-blau-darkest);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+}
+
+.btn-secondary {
+    background-color: var(--bam-schwarz-80); /* Primary button color */
+    border-color: var(--bam-schwarz-100);
+    transition: all 0.3s ease;
+    color: #fff;
+    padding: 10px 20px; /* More padding for bigger, modern buttons */
+    font-size: 1rem;
+    border-radius: 5px; /* Subtle rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow effect for depth */
+}
+
+.btn-secondary:hover {
+    background-color: var(--bam-schwarz-100);
+    border-color: var(--bam-schwarz-100);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
 }
 
@@ -54,6 +150,7 @@ body {
 .form-label {
     color: #2d572c; /* Darker green for form labels */
     font-weight: bold;
+    margin-bottom: 0;
 }
 
 /* Alert Styling */
@@ -77,15 +174,49 @@ body {
 h5 {
     text-transform: uppercase; /* Ensures the title is capitalized */
     letter-spacing: 1px; /* Adds spacing between letters for a modern feel */
+    margin-bottom: 16px;
 }
 
-/* Additional margin for file upload input */
-input[type="file"] {
-    margin-top: 10px;
+/*Collapsible log section*/
+.list-group-item-info, .list-group-item-warning, .list-group-item-danger {
+    --bs-list-group-color: black !important;
+    --bs-list-group-border-color: #ffffff !important
 }
 
-.progress, 
-.progress-bar {
-    border-radius: 0.375rem !important; /* Ensures consistent rounded corners */
-    height: 100% !important; /* Forces full vertical fill */
+.list-group-item-info {
+    --bs-list-group-bg: rgba(0, 175, 240, 0.3) !important; /* BAM blue */
+}
+.list-group-item-warning {
+    --bs-list-group-bg: rgba(255, 220, 0, 0.3) !important; /* BAM yellow */
+}
+.list-group-item-danger {
+    --bs-list-group-bg: rgba(210, 0, 30, 0.3) !important; /* BAM red */
+}
+
+.btn-link {
+    color: black !important;
+    text-decoration: none;
+}
+
+.btn-link:hover,
+.btn-link:focus {
+    color: black !important;
+    text-decoration: none; /* or none, your choice */
+}
+
+.list-group-item + .list-group-item {
+    border-top-width: 8px !important;
+}
+
+button svg.bi-chevron-right {
+  position: relative;
+  top: -2px; /* adjust up/down by changing this value */
+}
+
+.transition-arrow {
+  transition: transform 0.3s ease;
+}
+
+button[aria-expanded="true"] .transition-arrow {
+  transform: rotate(90deg);
 }
