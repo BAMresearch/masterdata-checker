@@ -53,9 +53,9 @@ Simply click on the localhost address `http://127.0.0.1:8000/` to launch the app
 
 ## Main contributors
 
-| Name | E-mail     | Role |
-|------|------------|--------|
-| Carlos Madariaga | [carlos.madariaga@bam.de](carlos.madariaga@bam.de) | Admin |
-| Dr. Jose M. Pizarro | [jose.pizarro-blanco@bam.de](jose.pizarro-blanco@bam.de) | Maintainer |
-| Jörg Rädler | [joerg.raedler@bam.de](joerg.raedler@bam.de) | Maintainer |
-| Dr. Angela Ariza | [angela.ariza@bam.de](angela.ariza@bam.de) | Maintainer |
+| Name | E-mail     |
+|------|------------|
+| Carlos Madariaga | [carlos.madariaga@bam.de](carlos.madariaga@bam.de) |
+| Dr. Jose M. Pizarro | [jose.pizarro-blanco@bam.de](jose.pizarro-blanco@bam.de) |
+| Jörg Rädler | [joerg.raedler@bam.de](joerg.raedler@bam.de) |
+| Dr. Angela Ariza | [angela.ariza@bam.de](angela.ariza@bam.de) |
