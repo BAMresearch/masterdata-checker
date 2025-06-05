@@ -14,10 +14,10 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
 ]
 name = "masterdata-checker"
-description = "A Python tool to check the correctness of a given Masterdata definitions file with respect to the entities already registered in the BAM Data Store."
+description = "A Django app to check the correctness of a Masterdata definitions file with respect to the entities already registered in an openBIS instance."
 dynamic = ["version"]
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [
   { name = "Carlos Madariaga", email = "carlos.madariaga@bam.de" },
   { name = "Jose M. Pizarro", email = "jose.pizarro-blanco@bam.de" },
@@ -48,9 +48,6 @@ dev = [
   "pytest-cov",
   "structlog==24.4.0",
 ]
-
-[project.scripts]
-masterdata_checker = "masterdata_checker.cli:cli"
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
