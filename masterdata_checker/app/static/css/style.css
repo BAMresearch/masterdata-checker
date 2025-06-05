@@ -184,13 +184,13 @@ h5 {
 }
 
 .list-group-item-info {
-    --bs-list-group-bg: rgb(0, 175, 240, 0.3) !important; /* BAM blue */
+    --bs-list-group-bg: rgba(0, 175, 240, 0.3) !important; /* BAM blue */
 }
 .list-group-item-warning {
-    --bs-list-group-bg: rgb(255, 220, 0, 0.3) !important; /* BAM yellow */
+    --bs-list-group-bg: rgba(255, 220, 0, 0.3) !important; /* BAM yellow */
 }
 .list-group-item-danger {
-    --bs-list-group-bg: rgb(210, 0, 30, 0.3) !important; /* BAM red */
+    --bs-list-group-bg: rgba(210, 0, 30, 0.3) !important; /* BAM red */
 }
 
 .btn-link {
