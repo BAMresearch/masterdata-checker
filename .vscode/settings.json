@@ -25,4 +25,19 @@
     "source.organizeImports.ruff": "always",
     "source.fixAll.ruff": "always",
   },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Django Server",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "${workspaceFolder}/masterdata_checker/manage.py",
+        "args": ["runserver"],
+        "django": true,
+        "justMyCode": false,
+        "console": "integratedTerminal"
+      }
+    ]
+  },
 }

@@ -1,5 +1,4 @@
 import datetime
-import logging
 import tempfile
 import uuid
 
@@ -9,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth import logout
 from django.core.cache import cache
 from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 from pybis import Openbis
 
 from masterdata_checker.app.utils import encrypt_password, get_openbis_from_cache
@@ -64,6 +64,10 @@ def homepage(request):
                 if log.get("level") == "debug":
                     continue
 
+                log["timestamp"] = datetime.datetime.fromisoformat(
+                    log["timestamp"].replace("Z", "+00:00")
+                ).strftime("%H:%M:%S, %d.%m-%Y")
+
                 context_log = {}
                 for k, v in log.items():
                     if k in ["event", "timestamp", "level"]:
@@ -79,6 +83,13 @@ def homepage(request):
             # Store raised errors in context for rendering
             context["error"] = str(e)
 
+        request.session["checker_logs"] = context.get("logs", [])
+        request.session["file"] = uploaded_file.name
+        return redirect("homepage")
+
+    # GET request (or after redirect)
+    context["logs"] = request.session.pop("checker_logs", None)
+    context["file"] = request.session.pop("file", None)
     return render(request, "homepage.html", context)
 
 
@@ -115,3 +126,9 @@ def logout_view(request):
     request.session.flush()  # Clear all session data
     logout(request)
     return redirect("login")
+
+
+@require_POST
+def clear_logs(request):
+    request.session.pop("checker_logs", None)
+    return redirect("homepage")
