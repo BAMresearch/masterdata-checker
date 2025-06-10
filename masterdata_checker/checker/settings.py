@@ -66,7 +66,7 @@ MIDDLEWARE = [
 
 CSRF_TRUSTED_ORIGINS = ["http://141.63.249.193:8000"]
 
-ROOT_URLCONF = "checker.urls"
+ROOT_URLCONF = "masterdata_checker.checker.urls"
 
 TEMPLATES = [
     {
