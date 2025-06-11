@@ -66,7 +66,7 @@ def homepage(request):
 
                 log["timestamp"] = datetime.datetime.fromisoformat(
                     log["timestamp"].replace("Z", "+00:00")
-                ).strftime("%H:%M:%S, %d.%m-%Y")
+                ).strftime("%H:%M:%S, %d.%m.%Y")
 
                 context_log = {}
                 for k, v in log.items():
