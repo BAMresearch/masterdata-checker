@@ -30,9 +30,9 @@ SECRET_ENCRYPTION_KEY = environ("SECRET_ENCRYPTION_KEY")
 OPENBIS_URL = "https://main.datastore.bam.de/"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = environ("DEBUG", default=False)
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "141.63.249.193", "141.63.249.2"]
+ALLOWED_HOSTS = environ("ALLOWED_HOSTS", default=['127.0.0.1', 'localhost'], cast=lambda v: [s.strip() for s in v.split(',')])
 
 CACHES = {
     "default": {
@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -63,7 +64,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["http://141.63.249.193:8000"]
+CSRF_TRUSTED_ORIGINS = environ("CSRF_TRUSTED_ORIGINS", default=[], cast=lambda v: [s.strip() for s in v.split(',')])
 
 ROOT_URLCONF = "checker.urls"
 
@@ -148,6 +149,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "app/static"]
+STATIC_ROOT = STATICFILES_DIRS[0]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
