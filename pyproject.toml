@@ -30,6 +30,7 @@ license = { file = "LICENSE" }
 dependencies = [
   "bam-masterdata>=0.4.2",
   "django",
+  "whitenoise",
   "pybis~=1.37.1rc4",
   "cryptography>=45.0.2",
   "python-decouple",
