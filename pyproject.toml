@@ -47,6 +47,7 @@ dev = [
   "pytest-timeout",
   "pytest-cov",
   "structlog==24.4.0",
+  "whitenoise",
 ]
 
 [tool.ruff]

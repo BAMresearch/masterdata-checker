@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -65,7 +66,7 @@ MIDDLEWARE = [
 
 CSRF_TRUSTED_ORIGINS = ["http://141.63.249.193:8000"]
 
-ROOT_URLCONF = "checker.urls"
+ROOT_URLCONF = "masterdata_checker.checker.urls"
 
 TEMPLATES = [
     {
@@ -83,7 +84,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "checker.wsgi.application"
+WSGI_APPLICATION = "masterdata_checker.checker.wsgi.application"
 
 
 # Database
@@ -147,7 +148,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "app/static"]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
