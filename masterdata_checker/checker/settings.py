@@ -30,9 +30,13 @@ SECRET_ENCRYPTION_KEY = environ("SECRET_ENCRYPTION_KEY")
 OPENBIS_URL = "https://main.datastore.bam.de/"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = environ("DEBUG", default=False)
+DEBUG = environ("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = environ("ALLOWED_HOSTS", default=['127.0.0.1', 'localhost'], cast=lambda v: [s.strip() for s in v.split(',')])
+ALLOWED_HOSTS = environ(
+    "ALLOWED_HOSTS",
+    default=["127.0.0.1", "localhost"],
+    cast=lambda v: [s.strip() for s in v.split(",")],
+)
 
 CACHES = {
     "default": {
@@ -64,9 +68,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-CSRF_TRUSTED_ORIGINS = environ("CSRF_TRUSTED_ORIGINS", default=[], cast=lambda v: [s.strip() for s in v.split(',')])
+CSRF_TRUSTED_ORIGINS = environ(
+    "CSRF_TRUSTED_ORIGINS", default=[], cast=lambda v: [s.strip() for s in v.split(",")]
+)
 
-ROOT_URLCONF = "checker.urls"
+ROOT_URLCONF = "masterdata_checker.checker.urls"
 
 TEMPLATES = [
     {
@@ -84,7 +90,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "checker.wsgi.application"
+WSGI_APPLICATION = "masterdata_checker.checker.wsgi.application"
 
 
 # Database
@@ -149,7 +155,8 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "app/static"]
-STATIC_ROOT = STATICFILES_DIRS[0]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
