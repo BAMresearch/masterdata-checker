@@ -43,7 +43,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "mypy==1.0.1",
-  "ruff",
+  "ruff==0.11.4",
   "pytest",
   "pytest-timeout",
   "pytest-cov",
