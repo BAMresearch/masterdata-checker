@@ -38,6 +38,12 @@ jobs:
     - name: Test with pytest
       run: |
         python -m pytest -sv tests
+    - name: Ruff linting
+      run: |
+        ruff check .
+    - name: Ruff formatting
+      run: |
+        ruff format . --check --verbose
   build-and-install:
     runs-on: ubuntu-latest
     steps:
@@ -56,17 +62,3 @@ jobs:
     - name: Install the package
       run: |
         uv pip install dist/*.tar.gz
-  ruff-linting:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - uses: chartboost/ruff-action@v1
-          with:
-            args: "check ."
-  ruff-formatting:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - uses: chartboost/ruff-action@v1
-          with:
-            args: "format . --check --verbose"
